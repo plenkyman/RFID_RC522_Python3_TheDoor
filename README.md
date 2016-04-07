@@ -29,11 +29,14 @@ After reboot run the SetupCards.py by running setupcards in terminal.
 follow prompts to set up the programming and your personal access card.
 
 Hardware:
-Raspberry Pi, Pi Camera, Edimax USB Wifi Dongle: http://amzn.com/B00UGBI91U
-RFID-RC522: http://amzn.com/B016BLFMMW
-Relay: http://amzn.com/B00E0NTPP4
-Electric Strike: http://amzn.com/B00V49S65M
-ExitButton:  http://amzn.com/B00G4ST666
+Raspberry Pi, Pi Camera, Edimax USB Wifi Dongle: http://amzn.com/B00UGBI91U,
+RFID-RC522: http://amzn.com/B016BLFMMW,
+Relay: http://amzn.com/B00E0NTPP4,
+Electric Strike: http://amzn.com/B00V49S65M,
+ExitButton:  http://amzn.com/B00G4ST666,
 
+Copyright 2014 (BSD License) Credits:  Florian Otto(Solider) and hadara
+based on http://bsd.ee/~hadara/blog/?p=1017&cpage=1
+remixed by plenkyman	V.17.March2016
 
 
