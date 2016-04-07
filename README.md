@@ -1,16 +1,12 @@
 # RFID_RC522_Python3_TheDoor
 Access System based on a raspberry pi, RC522 Rfid reader, python3
 
-access control system for a headless rasperry pi, running python3.
-
 - simple install script. 
 
 The pi runs itself once properly set up.
-TheDoor program restarts itself every 4 hours and reboots the pi once a day.
-This program is not attached to any tty and does not print to your screen.
 
-download and transfer raspian Jessie to SD Card from https://www.raspberrypi.org/downloads/raspbian/
-Full Desktop Jessie March 2016 Kernel 4.1 
+download and transfer raspian Jessie to SD Card from
+https://www.raspberrypi.org/downloads/raspbian/
 
 start Raspberry with screen, keyboard and mouse connected, it will start up in X by default.
 
@@ -23,8 +19,8 @@ reboot ! mandatory!
 
 after rebooting to terminal:
 			
-			1.	wget http://www.plenkyman.com/installthedoor.sh
-			2.	sh installthedoor.sh
+1.	wget http://www.plenkyman.com/installthedoor.sh
+2.	sh installthedoor.sh
 			
 This will take around 20 minutes, you will have to accept 3 prompts and enter a root password for mysql.
 The Rasperry will shut down when installation is finished.
