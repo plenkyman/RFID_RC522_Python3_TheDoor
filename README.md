@@ -35,7 +35,5 @@ Relay: http://amzn.com/B00E0NTPP4
 Electric Strike: http://amzn.com/B00V49S65M
 ExitButton:  http://amzn.com/B00G4ST666
 
-Raspian Jessie March 2016 Kernel 4.1
-additional installs: mysql, pymysql, pypy, numpy, MySQLWorkbench
-installs from Florian's tutorial: bcm2835, rpi-rc522, subversion
+
 
