@@ -1,0 +1,110 @@
+##############################################################################################
+####		Copyright 2014 (BSD License) Credits:  Florian Otto(Solider) and hadara
+####					based on http://bsd.ee/~hadara/blog/?p=1017&cpage=1
+####	--------------------------------------------------------------------------------------
+####	VCC- pin 1, 3.3 volts ||| RST- pin 22, GPIO25 ||| GND- pins, 6, 9, 14, 20, or 25,
+####	MISO- pin 21, GPIO9 ||| MOSI- pin 19, GPIO10 ||| SCK- pin 23, GPIO11
+####	NSS- pin 24, GPIO7 ||| IRQ- Don’t Attach to rpi
+####	--------------------------------------------------------------------------------------
+####				remixed by plenkyman	V.17.March2016
+##############################################################################################
+
+Hardware: Raspberry Pi, Pi Camera, Edimax USB Wifi Dongle: http://amzn.com/B00UGBI91U
+RFID-RC522: http://amzn.com/B016BLFMMW
+Relay: http://amzn.com/B00E0NTPP4
+Electric Strike: http://amzn.com/B00V49S65M
+ExitButton:  http://amzn.com/B00G4ST666
+
+Raspian Jessie March 2016 Kernel 4.1
+additional installs: mysql, pymysql, pypy, numpy, MySQLWorkbench
+installs from Florian's tutorial: bcm2835, rpi-rc522, subversion
+
+#############################		Installation Hardware		#######################
+
+Make Hardware install:
+   - RC522 RFID: VCC- pin 1, 3.3 volts | RST- pin 22, GPIO25 | GND- pins, 6, 9, 14, 20, or 25,
+     MISO- pin 21, GPIO9 | MOSI- pin 19, GPIO10 | SCK- pin 23, GPIO11 | NSS- pin 24, GPIO7
+     IRQ- Don’t Attach to rpi	
+   - install 4 LEDS (GPIO(green,red,yellow,pstat) to LED to resistor to Ground)
+   - install relay (VCC to 5V+, GPIO(d_strike) to IN1, Ground to Ground)
+   - install exit button (GPIO(d_exit) to NO, Ground to Ground)
+
+#############################		Installation Software		#######################
+download and transfer raspian Jessie to SD Card from https://www.raspberrypi.org/downloads/raspbian/
+
+Full Desktop Jessie March 2016 Kernel 4.1 
+
+start Raspberry with screen, keyboard and mouse connected, it will start up in X by default.
+
+set up raspi with user "pi", establish internet connection, go thru basic setup:
+   - set password, hostname, use device tree, Console Autologin Text console,
+    automatically logged in as 'pi' user, enable SPI + Camera, set locale, timezone, keyboard
+    and wificountry.
+
+reboot ! mandatory!
+
+after rebooting to terminal:
+			
+			1.	wget http://www.plenkyman.com/installthedoor.sh
+			2.	sh installthedoor.sh
+			
+This will take around 20 minutes, you will have to accept 3 prompts and enter a root password for mysql.
+The Rasperry will shut down when installation is finished.
+
+After reboot run the SetupCards.py by running setupcards in terminal.
+follow prompts to set up the programming and your personal access card.
+
+#############################		setting up the cards		#######################
+
+If you have followed the installation instructions you should now have cards to write new cards,
+House or Guest.
+- Swipe Make(HouseOrGuest)Cards once, all LED go on.
+- Swipe the new unknown card, only red LED stays on.
+- New Card is programmed.
+- The MakeCards can be disabled by the OverRide Card.
+
+Use MySQLWorkbench to edit Name of cards.
+
+There are 5 types of cards defined by the value of "access" in database RfidDoor table RfidCards:
+0 access revoked
+1 access granted 24/7 ( the entries for schedules are not evaluated for these cards)
+2 accces granted by schedules (weekdays and weekends)
+3 OverRide (opens door permanently until swiped again)
+4 make house cards (swipe this card, then the new card to make a house card, canceled by OverRide)
+5 make guest cards (swipe this card, then the new card to make a guest card, canceled by OverRide)
+
+number 2 cards "access granted by schedule":
+- setting up accessable days: any mixture of 0 - 6, each encapsulated by ' and seperated by , in weekdays
+  0 = Monday, 1= Tuesday, 2 = Wednesday, 3 = Thursday, 4 = Friday, 5 = Saturday, 6 = Sunday
+- setting opening hour weekdays: any integer 0 - 24 in hours_wk_st
+- setting closing hour weekdays: any integer 0 - 24 in hours_wk_end
+- setting opening hour weekend: any integer 0 - 24 in hours_wkend_st
+- setting closing hour weekend: any integer 0 - 24 in hours_wkend_end
+
+#############################	   using the program in terminal	#######################
+
+the program should run itself by means of crontab and scripts on error exit.
+
+- crontab is starting door at boot and restarting every 4 hours (because TheDoor runs in userland!)
+  at 6:59, 10:59, 14,59, 18:59, 22:59 (executed in about 1.5 seconds)
+- crontab reboots the pi at 2:59 each night (executed in about 32 seconds)
+- crontab backups mysql database RfidDoor at 2:57 each night
+
+the easiest way to manage and setup cards is by using MySQLWorkbench over ssh.
+
+newly available commands in terminal: 
+
+restartdoor		tries to quit the reader and the python file then restarts them again
+quitdoor		quits the rc522_reader and the python program
+restartpi01		restarts pi and starts the door at boot 
+dbdoor			shows the last 100 entries of mysql database AccLog Attendance
+dbcards			shows mysql databas RfidCards all cards
+lpi				shows logs of the custom scripts executed   
+ldoor			shows logs of attendance
+cleanlogs		erases all but the last 500 lines of lpi and ldoor
+backupdoor		backs up to another machine by rsync if path and login are defined in TheDoorConfig.py,
+				wait for command line prompt to enter password.
+resetconfig		reset TheDoorConfig file and create doorconf, run after changes in TheDoorConfig.py,
+				then run restartdoor.
+setupcards		use this to setup the first 4 cards as programming cards		
+
