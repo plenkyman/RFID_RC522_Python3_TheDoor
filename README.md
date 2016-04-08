@@ -22,7 +22,8 @@ after rebooting to terminal:
 1.	wget http://www.plenkyman.com/installthedoor.sh
 2.	sh installthedoor.sh
 			
-This will take around 20 minutes, you will have to accept 3 prompts and enter a root password for mysql.
+This will take around 20 minutes, it will update and upgrade apt-get, install subversion and mysql, pypy pymysql, 
+you will have to accept 3 prompts and enter a root password for mysql.
 The Rasperry will shut down when installation is finished.
 
 After reboot run the SetupCards.py by running setupcards in terminal.
