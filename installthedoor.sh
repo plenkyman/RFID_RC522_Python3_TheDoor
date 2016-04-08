@@ -5,12 +5,16 @@ echo "!!! - !!! - !!! - !!! - !!! - provided free and without any guarantees - !
 sleep 4
 echo "!!! - !!! - !!! - !!! - !!! - to cancel: Control c in the next 15 seconds - !!! - !!! - !!! - !!! - !!! - !!!"
 sleep 15
+read -p "Set the mysql database root password: " mysqlroot
+read -p "Set the mysql database user TtheDoor password: " mysqlthedoor
 wget http://www.plenkyman.com/thedoor.tar.gz
 tar -zxvf thedoor.tar.gz
 sleep 4
 rm thedoor.tar.gz
 sudo apt-get update
 sudo apt-get upgrade
+echo mysql-server mysql-server/root_password password $mysqlroot | sudo debconf-set-selections
+echo mysql-server mysql-server/root_password_again password $mysqlroot | sudo debconf-set-selections
 sudo apt-get -y install mysql-server pypy --fix-missing
 sudo pip3 install pymysql
 wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.50.tar.gz
@@ -35,13 +39,12 @@ cd ~
 sudo cat thedoor/system/bash_aliases.txt > ~/.bash_aliases
 echo "x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x - cron and bash aliases installed - x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x"
 cd thedoor/db_backup
-read -p "Enter the database root password again: " dbpasstemp
-mysql -u root -p$dbpasstemp -e "create database RfidDoor"
-mysql -D RfidDoor -u root -p$dbpasstemp -e "source TheDoor.sql"
-mysql -D RfidDoor -u root -p$dbpasstemp -e "CREATE USER 'TheDoor'@'localhost' IDENTIFIED BY 'Schmilblick'"
-mysql -D RfidDoor -u root -p$dbpasstemp -e "GRANT ALL PRIVILEGES ON * . * TO 'TheDoor'@'*'"
-mysql -D RfidDoor -u root -p$dbpasstemp -e "GRANT ALL PRIVILEGES ON * . * TO 'TheDoor'@'localhost'"
-mysql -D RfidDoor -u root -p$dbpasstemp -e "flush privileges"
+mysql -u root -p$mysqlroot -e "create database RfidDoor"
+mysql -D RfidDoor -u root -p$mysqlroot -e "source TheDoor.sql"
+mysql -D RfidDoor -u root -p$mysqlroot -e "CREATE USER 'TheDoor'@'localhost' IDENTIFIED BY '$mysqlthedoor'"
+mysql -D RfidDoor -u root -p$mysqlroot -e "GRANT ALL PRIVILEGES ON * . * TO 'TheDoor'@'*'"
+mysql -D RfidDoor -u root -p$mysqlroot -e "GRANT ALL PRIVILEGES ON * . * TO 'TheDoor'@'localhost'"
+mysql -D RfidDoor -u root -p$mysqlroot -e "flush privileges"
 echo "x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x - database installed and updated - x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x - 0 - x"
 sleep 4
 cd ~
