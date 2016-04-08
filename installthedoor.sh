@@ -11,7 +11,7 @@ sleep 4
 rm thedoor.tar.gz
 sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get install mysql-server pypy --fix-missing
+sudo apt-get -y install mysql-server pypy --fix-missing
 sudo pip3 install pymysql
 wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.50.tar.gz
 tar -zxf bcm2835-1.50.tar.gz
@@ -21,7 +21,7 @@ sudo make install
 sleep 4
 cd ~
 rm bcm2835-1.50.tar.gz
-sudo apt-get install subversion
+sudo apt-get -y install subversion
 svn checkout http://rpi-rc522.googlecode.com/svn/trunk/ rpi-rc522-read-only
 cd rpi-rc522-read-only/rc522
 gcc config.c rfid.c rc522.c main.c -o rc522_reader -lbcm2835
