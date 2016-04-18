@@ -185,45 +185,12 @@ try:
                 hours_wkend_end = int(row[8])
 
             if name=="":
-                print (" Choose what kind of card you would like to authorize: ")
-                print (" 1: Make House Card")
-                print (" 2: Make Guest Card")
-                print (" 3: Make OverRide Card")
-                print (" 4: Make your # 1 House card")
-                print (" 5: cancel request, exit program")
-                wichcard = int(input("Choose 1 - 4: "))
-                if wichcard == 1:  
-                    print (serial+" ,is now registerd as MakeHouse card.")
-                    print ("Swipe a new card or quit program: control c")
-                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET ID = (%s) WHERE OrderID = 1""",(serial));
-                elif wichcard == 2: 
-                    print (serial+" ,is now registerd as MakeGuest card.")
-                    print ("Swipe a new card or quit program: control c")
-                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET ID = (%s) WHERE OrderID = 2""",(serial));
-                elif wichcard == 3:
-                    print (serial+" ,is now registerd as OverRide card.")
-                    print ("Swipe a new card or quit program: control c")
-                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET ID = (%s) WHERE OrderID = 3""",(serial));
-                elif wichcard == 4:
-                    yourname=input("type your first and given name :")  
-                    print (yourname+" ,your card :"+serial+",is registerd now.")
-                    print ("Swipe a new card or quit program: control c")
-                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET ID = (%s),name = (%s) WHERE OrderID = 4""",(serial,yourname));
-                elif wichcard == 5:
-                    print ("request cancelled")
-                    os.system(tdc.pathtoscript + "restartdoor")
-                else:
-                    print ("No valid selection")
-                    print ("Swipe a new card or or cancel with control c")
-### known card cards
-            else: 
-                print ("This card is already registerd, do you want to edit this card? ")
+                print ("New card, provide a Name and chose access level or exit program: ")
                 print ("1. Edit this card ")
-                print ("2. go back swipe a new card ")
-                print ("3. quit this program ")
-                selectaction = int(input("Choose 1 - 3: "))
-                if selectaction == 1:
-                    nametocard = int(input("Enter Name of cardholder: "))
+                print ("2. exit program")
+                followaction = int(input("Choose 1 or 2: "))
+                if followaction == 1:
+                    nametocard = input("Enter Name of cardholder: ")
                     print ("Chose wich type of acces right for this card: ")
                     print ("1. House Card, access granted 24/7")
                     print ("2. Guest Card, access by schedule")
@@ -232,9 +199,30 @@ try:
                     print ("5. Make Guest Cards, Programming")
                     print ("0. Revoke this card")
                     accesstocard = int(input("Chose 1 - 5 or 0 : "))
-                    nametocard = input("Enter Name of cardholder: ")
-                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET name = nametocard, access = accesstocard WHERE ID = (%)""",(serial));           
+                    cursor.execute("""CREATE """+(tdc.dbKe)+""" SET name = nametocard, access = accesstocard WHERE ID = (%)""",(serial));
+                if followaction == 2:
+                    print ("quiting Setupcards.py")
+                    os.system(tdc.pathtoscript + "restartdoor")
+### known card cards
+            else: 
+                print ("This card is already registerd, do you want to edit this card? ")
+                print ("1. Edit this card ")
+                print ("2. go back swipe a new card ")
+                print ("3. quit this program ")
+                selectaction = int(input("Choose 1 - 3: "))
+                if selectaction == 1:
+                    nametocard = int(input("Enter Name od cardholder: "))
+                    print ("Chose wich type of acces right for this card: ")
+                    print ("1. House Card, access granted 24/7")
+                    print ("2. Guest Card, access by schedule")
+                    print ("3. OverRide Card, Programming")
+                    print ("4. Make House Cards, Programming")
+                    print ("5. Make Guest Cards, Programming")
+                    print ("0. Revoke this card")
+                    accesstocard = int(input("Chose 1 - 5 or 0 : "))
+                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET name = nametocard, access = accesstocard WHERE ID = (%)""",(serial));
                 if selectaction == 2:
+                    print ("swipe a new card")
                     pass
                 if selectaction == 3:
                     print ("quiting Setupcards.py")
