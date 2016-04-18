@@ -1,5 +1,5 @@
 #!bin/bash
-echo "This Uninstaller will remove all files from Thedoor"
+echo "This Uninstaller will remove all files from Thedoor installation"
 echo "The apt-get and subversion modules installed will remain!"
 read -p "Enter the mysql database root password: " db_pw_root
 mysql -D RfidDoor -u root -p$db_pw_root -e "DROP USER TheDoor"
