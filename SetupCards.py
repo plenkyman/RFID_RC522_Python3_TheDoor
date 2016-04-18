@@ -199,7 +199,8 @@ try:
                     print ("5. Make Guest Cards, Programming")
                     print ("0. Revoke this card")
                     accesstocard = int(input("Chose 1 - 5 or 0 : "))
-                    cursor.execute("""CREATE """+(tdc.dbKe)+""" SET name = nametocard, access = accesstocard WHERE ID = (%)""",(serial));
+                    cursor.execute("""INSERT INTO """+(tdc.dbKe)+"""(ID,name,access) VALUES ((%s),(%s),(%s))""",(serial,name,acc_group));
+                    #cursor.execute("""CREATE """+(tdc.dbKe)+""" SET name = nametocard, access = accesstocard WHERE ID = (%)""",(serial));
                 if followaction == 2:
                     print ("quiting Setupcards.py")
                     os.system(tdc.pathtoscript + "restartdoor")
