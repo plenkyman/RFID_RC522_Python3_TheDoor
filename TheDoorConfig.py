@@ -69,7 +69,7 @@ def mk_doorconf():
     bashline8="dbusr="+dbUs+"\n"
     bashline9="dbpwd="+dbPW+"\n"
 
-    f = open('/home/pi/doorconf', 'w')
+    f = open('/home/pi/.doorconf', 'w')
     f.write('#!/bin/bash\n')
     f.write(bashline1)
     f.write(bashline2)
