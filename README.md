@@ -39,19 +39,19 @@ To see all registered cards use terminal command dbcards.
 
 all newly available commands:
 
-restartdoor  	tries to quit the reader and the python file then restarts them again
-quitdoor		quits the rc522_reader and the python program
-restartpi01		restarts pi and starts the door at boot 
-dbdoor			shows attendance, the last 100 entries of mysql database table AccLog 
-dbcards			shows registered cards, mysql database table RfidCards all cards
-lpi				shows logs of the custom scripts executed   
-ldoor			shows logs of attendance
-cleanlogs		erases all but the last 500 lines of lpi and ldoor
-backupdoor		backs up to another machine by rsync if path and login are defined in TheDoorConfig.py,
-				wait for command line prompt to enter password.
-resetconfig		reset TheDoorConfig file and create doorconf, run after changes in TheDoorConfig.py,
-				then run restartdoor.
-setupcards		use this to setup the first 4 cards as programming cards	
+- restartdoor  	tries to quit the reader and the python file then restarts them again
+- quitdoor		quits the rc522_reader and the python program
+- restartpi01		restarts pi and starts the door at boot 
+- dbdoor		shows attendance, the last 100 entries of mysql database table AccLog 
+- dbcards		shows registered cards, mysql database table RfidCards all cards
+- lpi			shows logs of the custom scripts executed   
+- ldoor			shows logs of attendance
+- cleanlogs		erases all but the last 500 lines of lpi and ldoor
+- backupdoor		backs up to another machine by rsync if path and login are defined in TheDoorConfig.py,
+			wait for command line prompt to enter password.
+- resetconfig		reset TheDoorConfig file and create doorconf, run after changes in TheDoorConfig.py,
+			then run restartdoor.
+- setupcards		use this to setup the first 4 cards as programming cards	
 
 The GPIO pins are set in TheDoorConfig.py. There are several other preferences, paths, camera settings
 you can edit by opening that file in a texteditor.
