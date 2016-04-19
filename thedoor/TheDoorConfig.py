@@ -1,15 +1,14 @@
-#!/usr/bin/python3
+import sys
+import os
+import time
+import datetime
+import RPi.GPIO as GPIO
 ###############################################################################################
 ####		Copyright 2014 (BSD License) Credits:  Florian Otto(Solider) and hadara			###
 ####					based on http://bsd.ee/~hadara/blog/?p=1017&cpage=1 				###
 ####	--------------------------------------------------------------------------------	###
 ####							remixed by plenkyman, March 2016							###
 ###############################################################################################
-import sys
-import os
-import time
-import datetime
-import RPi.GPIO as GPIO
 ###	System
 rpi_ip="localhost" 								### Raspberry's ip-address
 p2 = "file"										### print to "terminal or file"

@@ -1,0 +1,8 @@
+#!/bin/bash
+source .doorconf
+exec 1>> $pathtologpi 
+now=$(date +"%T-%m-%d-%y")
+mysqldump --user=$dbusr --password=$dbpwd $dbname > $pathtodoor\/db_backup/RfidDoor.sql.`date +"%Y%m%d"`
+gzip $pathtodoor\/db_backup/RfidDoor.sql.`date +"%Y%m%d"`
+echo "$now : db backed up, by cron"
+exit

@@ -1,0 +1,9 @@
+#!/bin/bash
+source .doorconf
+exec 1>> $pathtologpi 2>&1
+sleep 3
+now=$(date +"%T-%m-%d-%y")
+cd $pathtodoor
+python3 TheDoor.py &
+echo "$now : TheDoor started by cron at boot"
+exit

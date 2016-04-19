@@ -1,13 +1,13 @@
 ##############################################################################################
-####		Copyright 2014 (BSD License) Credits:  Florian Otto(Solider) and hadara
-####					based on http://bsd.ee/~hadara/blog/?p=1017&cpage=1
-####	--------------------------------------------------------------------------------------
-####	VCC- pin 1, 3.3 volts ||| RST- pin 22, GPIO25 ||| GND- pins, 6, 9, 14, 20, or 25,
-####	MISO- pin 21, GPIO9 ||| MOSI- pin 19, GPIO10 ||| SCK- pin 23, GPIO11
-####	NSS- pin 24, GPIO7 ||| IRQ- Don’t Attach to rpi
-####	--------------------------------------------------------------------------------------
-####				remixed by plenkyman	V.17.March2016
-##############################################################################################
+		Copyright 2014 (BSD License) Credits:  Florian Otto(Solider) and hadara
+					based on http://bsd.ee/~hadara/blog/?p=1017&cpage=1
+	--------------------------------------------------------------------------------------
+	VCC- pin 1, 3.3 volts ||| RST- pin 22, GPIO25 ||| GND- pins, 6, 9, 14, 20, or 25,
+	MISO- pin 21, GPIO9 ||| MOSI- pin 19, GPIO10 ||| SCK- pin 23, GPIO11
+	NSS- pin 24, GPIO7 ||| IRQ- Don’t Attach to rpi
+	--------------------------------------------------------------------------------------
+			remixed by plenkyman	v7.March2016
+#######################       thedoorpy@plenkyman.com       ##################################
 
 Hardware: Raspberry Pi, Pi Camera, Edimax USB Wifi Dongle: http://amzn.com/B00UGBI91U
 RFID-RC522: http://amzn.com/B016BLFMMW
@@ -19,9 +19,8 @@ Raspian Jessie March 2016 Kernel 4.1
 additional installs: mysql, pymysql, pypy, numpy, MySQLWorkbench
 installs from Florian's tutorial: bcm2835, rpi-rc522, subversion
 
-#############################		Installation Hardware		#######################
+### Installation Hardware:
 
-Make Hardware install:
    - RC522 RFID: VCC- pin 1, 3.3 volts | RST- pin 22, GPIO25 | GND- pins, 6, 9, 14, 20, or 25,
      MISO- pin 21, GPIO9 | MOSI- pin 19, GPIO10 | SCK- pin 23, GPIO11 | NSS- pin 24, GPIO7
      IRQ- Don’t Attach to rpi	
@@ -29,43 +28,44 @@ Make Hardware install:
    - install relay (VCC to 5V+, GPIO(d_strike) to IN1, Ground to Ground)
    - install exit button (GPIO(d_exit) to NO, Ground to Ground)
 
-#############################		Installation Software		#######################
-download and transfer raspian Jessie to SD Card from https://www.raspberrypi.org/downloads/raspbian/
+### Installation Software
+##########################################################################################
+##########################################################################################
 
-Full Desktop Jessie March 2016 Kernel 4.1 
+Option: full install, all necessary software is installed:
+##################################################
 
-start Raspberry with screen, keyboard and mouse connected, it will start up in X by default.
+- download and transfer raspian Jessie to SD Card from https://www.raspberrypi.org/downloads/raspbian/
+- Full Desktop Jessie March 2016 Kernel 4.1 
 
-set up raspi with user "pi", establish internet connection, go thru basic setup:
-   - set password, hostname, use device tree, Console Autologin Text console,
-    automatically logged in as 'pi' user, enable SPI + Camera, set locale, timezone, keyboard
-    and wificountry.
-
-reboot ! mandatory!
-
-after rebooting to terminal:
-			
-			1.	wget http://www.plenkyman.com/installthedoor.sh
-			2.	sh installthedoor.sh
-			
-This will take around 20 minutes, you will have to accept 3 prompts and enter a root password for mysql.
-The Rasperry will shut down when installation is finished.
+- start Raspberry with screen, keyboard and mouse connected, it will start up in X by default.
+- set up raspi with user "pi", establish internet connection, go thru basic setup:
+  set password, hostname, use device tree, Console Autologin Text console,
+  automatically logged in as 'pi' user, enable SPI + Camera, set locale, timezone, keyboard
+  and wificountry.
+- reboot ! mandatory!
+- after rebooting to terminal:
+	1.	wget http://www.plenkyman.com/thedoor_full_install_v7.sh
+	2.	. thedoor_full_install_v7.sh		
+- This will take around 20 minutes, you will have to enter a root password for mysql
+  and a password for the RfidDoor database.
+  The Rasperry will shut down when installation is finished.
+	
+Option: partial install, on systems that have mysql, pypy, pymysql, numpy, subversion installed:
+#########################################################################################
+- in Terminal: 1.	wget http://www.plenkyman.com/thedoor_partial_install_v7.sh
+			   2.	. thedoor_partial_install_v7.sh	
+- This will take a few minutes, you will have to enter your root password for mysql
+  and a new password for the RfidDoor database.
+  The Rasperry will shut down when installation is finished.
+##########################################################################################  
+##########################################################################################  
+### Setting up the cards after installation:
 
 After reboot run the SetupCards.py by running setupcards in terminal.
-follow prompts to set up the programming and your personal access card.
+Follow prompts to set name and access level.
 
-#############################		setting up the cards		#######################
-
-If you have followed the installation instructions you should now have cards to write new cards,
-House or Guest.
-- Swipe Make(HouseOrGuest)Cards once, all LED go on.
-- Swipe the new unknown card, only red LED stays on.
-- New Card is programmed.
-- The MakeCards can be disabled by the OverRide Card.
-
-Use MySQLWorkbench to edit Name of cards.
-
-There are 5 types of cards defined by the value of "access" in database RfidDoor table RfidCards:
+There are 5 acces levels defined by the value of "access" in database RfidDoor table RfidCards:
 0 access revoked
 1 access granted 24/7 ( the entries for schedules are not evaluated for these cards)
 2 accces granted by schedules (weekdays and weekends)
@@ -81,7 +81,16 @@ number 2 cards "access granted by schedule":
 - setting opening hour weekend: any integer 0 - 24 in hours_wkend_st
 - setting closing hour weekend: any integer 0 - 24 in hours_wkend_end
 
-#############################	   using the program in terminal	#######################
+### setting up the cards with MakeHouseCards or MakeGuestCards:
+
+	- Swipe Make(HouseOrGuest)Card once, all LED go on.
+	- Swipe the new unknown card, only red LED stays on.
+	- New Card is programmed.
+	- The MakeCards status can be disabled by the OverRide Card.
+
+	Use MySQLWorkbench to edit Name of cards.
+
+### using the program in terminal
 
 the program should run itself by means of crontab and scripts on error exit.
 
@@ -90,7 +99,10 @@ the program should run itself by means of crontab and scripts on error exit.
 - crontab reboots the pi at 2:59 each night (executed in about 32 seconds)
 - crontab backups mysql database RfidDoor at 2:57 each night
 
-the easiest way to manage and setup cards is by using MySQLWorkbench over ssh.
+the easiest way to manage and setup cards is terminal command setupcards.
+this permits you to name cards and determine access level.
+
+By using MySQLWorkbench over ssh you can edit schedules, groups for any card.
 
 newly available commands in terminal: 
 

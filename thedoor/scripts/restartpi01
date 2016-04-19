@@ -1,0 +1,15 @@
+#!/bin/bash
+source .doorconf
+exec 1>> $pathtologpi 2>&1
+toBeKilled=$(pgrep -f 'python3 TheDoor.py')
+sleep .1
+sudo kill -15 $toBeKilled
+sleep .1
+toBeKilled=$(pgrep -f 'rc522_reader')
+sleep .1
+sudo kill -15 $toBeKilled
+sleep .1
+now=$(date +"%T-%m-%d-%y")
+echo "$now : TheDoor and rc522 killed by script restartpi01"
+sudo reboot
+exit

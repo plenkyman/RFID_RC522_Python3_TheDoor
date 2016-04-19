@@ -1,0 +1,7 @@
+#tata
+@reboot pi /home/pi/thedoor/scripts/startdooratboot
+59 6,10,14,18,22 * * * pi /home/pi/thedoor/scripts/restartdoorcron
+57 2 * * * pi /home/pi/thedoor/scripts/mysqlbackup
+59 2 * * * pi /home/pi/thedoor/scripts/restartpi01
+15 3 */3 * * pi /home/pi/thedoor/scripts/clean_logs
+# titi
