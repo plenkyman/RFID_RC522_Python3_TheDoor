@@ -199,20 +199,27 @@ try:
                     print ("5. Make Guest Cards, Programming")
                     print ("0. Revoke this card")
                     accesstocard = int(input("Chose 1 - 5 or 0 : "))
-                    cursor.execute("""INSERT INTO """+(tdc.dbKe)+"""(ID,name,access) VALUES ((%s),(%s),(%s))""",(serial,name,acc_group));
-                    #cursor.execute("""CREATE """+(tdc.dbKe)+""" SET name = nametocard, access = accesstocard WHERE ID = (%)""",(serial));
+                    cursor.execute("""INSERT INTO """+(tdc.dbKe)+"""(ID,name,access) VALUES ((%s),(%s),(%s))""",(serial,nametocard,accesstocard));
+                    print ("card written to database, swipe another card or quit (control c)")
                 if followaction == 2:
                     print ("quiting Setupcards.py")
-                    os.system(tdc.pathtoscript + "restartdoor")
+                    sys.exit(0) 
 ### known card cards
-            else: 
-                print ("This card is already registerd, do you want to edit this card? ")
+            elif name!="": 
+                print ("This card is already registerd as: ",name," and has an accesslevel of: ",access,"")
+                print ("1. House Card, access granted 24/7")
+                print ("2. Guest Card, access by schedule")
+                print ("3. OverRide Card, Programming")
+                print ("4. Make House Cards, Programming")
+                print ("5. Make Guest Cards, Programming")
+                print ("0. Revokek this card")
+                print ("Do you want to edit this card? ")
                 print ("1. Edit this card ")
                 print ("2. go back swipe a new card ")
                 print ("3. quit this program ")
                 selectaction = int(input("Choose 1 - 3: "))
                 if selectaction == 1:
-                    nametocard = int(input("Enter Name od cardholder: "))
+                    nametocard = input("Enter new Name for cardholder: ")
                     print ("Chose wich type of acces right for this card: ")
                     print ("1. House Card, access granted 24/7")
                     print ("2. Guest Card, access by schedule")
@@ -221,13 +228,14 @@ try:
                     print ("5. Make Guest Cards, Programming")
                     print ("0. Revoke this card")
                     accesstocard = int(input("Chose 1 - 5 or 0 : "))
-                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET name = nametocard, access = accesstocard WHERE ID = (%)""",(serial));
+                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET name = (%s), access = (%s) WHERE ID = (%s)""",(nametocard,accesstocard,serial));
+                    print ("card updated on database, swipe another card or quit (control c)")
                 if selectaction == 2:
-                    print ("swipe a new card")
+                    print ("swipe a new card or quit (control c)")
                     pass
                 if selectaction == 3:
                     print ("quiting Setupcards.py")
-                    os.system(tdc.pathtoscript + "restartdoor")
+                    sys.exit(0) 
             cursor.close()
             connection.commit()
             connection.close ()
