@@ -120,3 +120,7 @@ resetconfig		reset TheDoorConfig file and create doorconf, run after changes in 
 				then run restartdoor.
 setupcards		use this to setup the first 4 cards as programming cards		
 
+Uninstall, remove program:
+#################################################################################
+Terminal 1. wget http://www.plenkyman.com/thedoor_uninstaller_v7.sh
+	 2. . thedoor_uninstaller_v7.sh
