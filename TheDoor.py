@@ -299,4 +299,4 @@ except BaseException as error:
 finally:    
     printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdc.errLine + "TheDoor.py restarting after finally")
     os.system(tdc.pathtoscript + "restartdoor")
-    sys.exit(0)    
+    sys.exit(0)
