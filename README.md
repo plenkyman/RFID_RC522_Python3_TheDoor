@@ -30,7 +30,7 @@ Swipe the card once more to enable access control again.
 
 If a PiCamera is installed and enabled in TheDoorConfig.py it takes pictures when:
 access is denied because of a revoked, out of schedule or unknown card.
-pictures are stored in ~/thedoor/images.
+Pictures are stored in ~/thedoor/images.
 
 Monitor this program in terminal over ssh.
 To see logs of door access either use terminal command ldoor or dbdoor.
