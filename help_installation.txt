@@ -63,7 +63,8 @@ Option: partial install, on systems that have mysql, pypy, pymysql, numpy, subve
 ### Setting up the cards after installation:
 
 After reboot run the SetupCards.py by running setupcards in terminal.
-Follow prompts to set name and access level.
+Follow prompts to set name and access level. Configure the OverRide,MakeHouse & Make Guest Cards.
+You can later use these cards to program new cards while TheDoor.py is running.
 
 There are 5 acces levels defined by the value of "access" in database RfidDoor table RfidCards:
 0 access revoked
