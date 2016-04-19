@@ -1,0 +1,22 @@
+#!/bin/bash
+source .doorconf
+exec 1>> $pathtologpi
+cd $pathtodoor"logs/"
+tail -500 TheDoor.log > TheDoor.tmp
+cat TheDoor.tmp > TheDoor.log
+rm TheDoor.tmp
+sleep .3
+now=$(date +"%T-%m-%d-%y")
+echo "$now : TheDoor.log cleaned"
+tail -500 pi_user_door.log > pi_user_door.tmp
+cat pi_user_door.tmp > pi_user_door.log
+rm pi_user_door.tmp
+sleep .3
+now=$(date +"%T-%m-%d-%y")
+echo "$now : pi_user_door.log cleaned"
+exit
+
+
+
+
+

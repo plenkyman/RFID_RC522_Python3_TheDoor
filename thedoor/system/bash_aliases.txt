@@ -1,0 +1,11 @@
+alias restartdoor=/home/pi/thedoor/scripts/restartdoor
+alias quitdoor=/home/pi/thedoor/scripts/quitdoor
+alias ldoor='tail -n 90 /home/pi/thedoor/logs/TheDoor.log'
+alias lpi='tail -n 90 /home/pi/thedoor/logs/pi_user_door.log'
+alias dbdoor=/home/pi/thedoor/scripts/mysql_door
+alias dbcards=/home/pi/thedoor/scripts/mysql_cards
+alias backupdoor=/home/pi/thedoor/scripts/backup_thedoor_to_pi02
+alias restartpi01=/home/pi/thedoor/scripts/restartpi01
+alias cleanlogs=/home/pi/thedoor/scripts/clean_logs
+alias resetconfig=/home/pi/thedoor/scripts/resetconfig
+alias setupcards=/home/pi/thedoor/scripts/setupcards

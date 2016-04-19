@@ -1,0 +1,7 @@
+#!/bin/bash
+source .doorconf
+exec 1>> $pathtologpi
+now=$(date +"%T-%m-%d-%y")
+sudo rsync -az $pathtodoor $logrsyncbackup 
+echo "$now : thedoor backed up to pi02"
+exit

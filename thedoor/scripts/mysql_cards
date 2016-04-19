@@ -1,0 +1,4 @@
+#!/bin/bash
+source .doorconf
+mysql -D $dbname -u $dbusr -p$dbpwd -e "select OrderID,name,counter,acc_group,access,ID from RfidCards;"
+exit

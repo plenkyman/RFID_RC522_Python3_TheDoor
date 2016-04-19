@@ -1,0 +1,21 @@
+#!/bin/bash
+source .doorconf
+exec 1>> $pathtologpi
+sleep .2
+now=$(date +"%T-%m-%d-%y")
+toBeKilled=$(pgrep -f 'python3 TheDoor.py')
+sleep .1
+sudo kill -15 $toBeKilled
+sleep .1
+toBeKilled=$(pgrep -f 'rc522_reader')
+sleep .1
+sudo kill -15 $toBeKilled
+sleep .1
+cd $pathtodoor
+python3 TheDoorConfig.py &
+sleep .2
+toBeKilled=$(pgrep -f 'python3 TheDoorConfig.py')
+sleep .1
+sudo kill -15 $toBeKilled
+echo "$now : TheDoorConfig has been reset"
+exit

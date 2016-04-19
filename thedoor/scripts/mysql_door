@@ -1,0 +1,4 @@
+#!/bin/bash
+source .doorconf
+mysql -D $dbname -u $dbusr -p$dbpwd -e "select acc,nam,err,id,card from AccLog WHERE id >  ((SELECT MAX(id) from AccLog) - 100);"
+exit
