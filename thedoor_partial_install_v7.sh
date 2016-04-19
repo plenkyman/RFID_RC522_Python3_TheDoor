@@ -79,6 +79,6 @@ sed -i "s/Schmilblick/$db_pw_thedoor/g" TheDoorConfig.py
 python3 TheDoorConfig.py
 sleep 2
 cd ~
-rm thedoor_partial_install_v7.sh
+rm thedoor_partial_install_v*
 echo "the pi will restart in 60 seconds"
 sudo shutdown -r +1
