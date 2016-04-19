@@ -38,7 +38,7 @@ do
 	echo "entries do not match"
 done
 db_pw_thedoor=$bcheck1
-wget http://www.plenkyman.com/thedoor.tar.gz
+wget http://www.thedoor.plenkyman.com/thedoor.tar.gz
 tar -zxvf thedoor.tar.gz
 rm thedoor.tar.gz
 clear
