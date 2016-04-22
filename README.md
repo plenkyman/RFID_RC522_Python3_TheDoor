@@ -52,6 +52,4 @@ all newly available commands:
 - resetconfi	 : - reset TheDoorConfig file and create doorconf, run after changes in TheDoorConfig.py,
 			then run restartdoor.
 - setupcard	 : - use this to setup the first 4 cards as programming cards	
-
-The GPIO pins are set in TheDoorConfig.py. There are several other preferences, paths, camera settings
-you can edit by opening that file in a texteditor.
+- setdoorprefs	 : - Set GPIO pins and PiCam settings
