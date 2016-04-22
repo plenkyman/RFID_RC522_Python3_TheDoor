@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ~
 source .doorconf
 exec 1>> $pathtologpi
 sleep .2

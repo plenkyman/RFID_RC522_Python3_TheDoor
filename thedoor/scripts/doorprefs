@@ -1,0 +1,102 @@
+#!/bin/bash
+source ~/thedoor/TheDoorPrefs.py
+##------------------  Sets the numerical value in the source file ------------------##
+##called with 2 arguments: variable name doublequoted, explaining text doublequoted ##
+setGPIO () {
+VAR1=$1
+VAR2=$1"="
+VAR3=${!VAR1}
+defaulttext=$VAR3
+while :
+do
+read -p "$2(Current selection $defaulttext):" Answer
+if echo $Answer | grep -qE ^\-?[0-9]?\.?[0-9]+$
+then
+break
+fi
+echo "Invalid, enter an integer."
+done
+sed -i "s/$VAR2$VAR3/$VAR2$Answer/g" ~/thedoor/TheDoorPrefs.py
+}
+##------------------  Sets the variable in the source file ------------------##
+##called with 7 arguments: variable name doublequoted, explaining text doublequoted, choices ##
+setCam () {
+VAR1=$1
+VAR2=$1"="
+VAR3=${!VAR1}
+defaulttext=$VAR3
+while :
+do
+read -p "$2(Current selection $defaulttext):" Answer
+if [ "$Answer" = "$3" ]
+then
+echo "Selection: $Answer"
+break
+fi
+if [ "$Answer" = "$4" ]
+then
+echo "Selection: $Answer"
+break
+fi
+if [ "$Answer" = "$5" ]
+then
+echo "Selection: $Answer"
+break
+fi
+if [ "$Answer" = "$6" ]
+then
+echo "Selection: $Answer"
+break
+fi
+if [ "$Answer" = "$7" ]
+then
+echo "Selection: $Answer"
+break
+fi
+echo "Chose from these options: $3 $4 $5 $6 $7"
+done
+sed -i "s/$VAR2\"$VAR3\"/$VAR2\"$Answer\"/g" ~/thedoor/TheDoorPrefs.py
+}
+###-----------------------------------------------------------------------###
+while :
+do
+read -p "Autorize access, enter TheDoor mysql password: " -s tempmemp
+echo " "
+if [ "$tempmemp" = "$dbPW" ]
+then
+break
+fi
+echo "Not the valid password. NO ACCESS!"
+tempmemp="azerty"
+exit
+done
+###-----------------------------------------------------------------------###
+if whiptail --yesno "Do you want to edit the GPIO assignment?" 20 60 ;then
+setGPIO $"green" $"Set GPIO for green LED: " 
+setGPIO $"red" $"Set GPIO for red LED: " 
+setGPIO $"yellow" $"Set GPIO for yellow LED: " 
+setGPIO $"pstat" $"Set GPIO for powerstatus LED: " 
+setGPIO $"d_strike" $"Set GPIO for the door strike: "
+setGPIO $"d_exit" $"Set GPIO for the exit button: "
+setGPIO $"d_time" $"Set # of seconds lock stays open: "
+###-----------------------------------------------------------------------###
+else
+    echo "No parameters changed."
+fi
+###-----------------------------------------------------------------------###
+###-----------------------------------------------------------------------###
+
+###-----------------------------------------------------------------------###
+if whiptail --yesno "Do you want to edit the PiCamera settings?" 20 60 ;then
+###-----------------------------------------------------------------------###
+setCam $"OnOffPiCam" $"Set PiCam to on or off: " $"on" $"off"
+setCam $"picem" $"Chose the PiCam exposure setting: z for info" $"auto" $"backlight" $"night" $"nightpreview"
+setCam $"camff" $"Chose the PiCam file format: z for info" $"jpg" $"gif" $"png" $"bmp"
+setGPIO $"camrot" $"Set rotation for PiCam (0 ,90 ,180,270): "
+###-----------------------------------------------------------------------###
+echo "All set, ready to run"
+else
+    echo "No parameters changed."
+fi
+echo "getting back to TheDoor."
+. ~/thedoor/scripts/restartdoor

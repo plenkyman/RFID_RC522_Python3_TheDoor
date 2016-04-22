@@ -2,7 +2,7 @@
 ####		Copyright 2014 (BSD License) Credits:  Florian Otto(Solider) and hadara     	###
 ####					based on http://bsd.ee/~hadara/blog/?p=1017&cpage=1 				###
 ####	--------------------------------------------------------------------------------	###		           		
-####									remixed by plenkyman	V.17.March2016				###
+####						remixed by plenkyman	V.8.April2016		 					###
 ###############################################################################################
 
 Detailed installation instructions in help_installation.txt
@@ -36,18 +36,20 @@ To see all registered cards use dbcards.
 all newly available commands:
 
 restartdoor  	tries to quit the reader and the python file then restarts them again
+				(run by cron 6:59, 10:59, 14:59, 18:59, 22:59, 1.5 seconds to execute)
 quitdoor		quits the rc522_reader and the python program
-restartpi01		restarts pi and starts the door at boot 
+restartpi01		restarts pi and starts the door at boot (run by cron 2.59 AM, 38 seconds to execute)
 dbdoor			shows attendance, the last 100 entries of mysql database table AccLog 
 dbcards			shows registered cards, mysql database table RfidCards all cards
 lpi				shows logs of the custom scripts executed   
 ldoor			shows logs of attendance
-cleanlogs		erases all but the last 500 lines of lpi and ldoor
+cleanlogs		erases all but the last 500 lines of lpi and ldoor (run by cron 3:15 AM every 10 days)
 backupdoor		backs up to another machine by rsync if path and login are defined in TheDoorConfig.py,
 				wait for command line prompt to enter password.
 resetconfig		reset TheDoorConfig file and create doorconf, run after changes in TheDoorConfig.py,
 				then run restartdoor.
-setupcards		use this to setup the first 4 cards as programming cards	
+setupcards		use this to setup the first 4 cards as programming cards
+setdoorprefs	set the GPIO pins and PiCamera settings
 				
 				
 				

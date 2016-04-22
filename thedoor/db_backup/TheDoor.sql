@@ -71,7 +71,6 @@ CREATE TABLE `RfidCards` (
 
 LOCK TABLES `RfidCards` WRITE;
 /*!40000 ALTER TABLE `RfidCards` DISABLE KEYS */;
-INSERT INTO `RfidCards` VALUES ('[94957a5a]','Make House Cards',0,'Programming',4,'\"\'0\',\'1\',\'2\',\'3\',\'4\',\'5\',\'6\'\"',21,9,10,17,1),('[84aa7b5a]','Make Guest Cards',0,'Programming',5,'\"\'0\',\'1\',\'2\',\'3\',\'4\',\'5\',\'6\'\"',21,9,10,17,2),('[06153100]','OverRide Fob',0,'Programming',3,'\"\'0\',\'1\',\'2\',\'3\',\'4\',\'5\',\'6\'\"',21,9,10,17,3),('[5474855a]','House 01',0,'House',1,'\"\'0\',\'1\',\'2\',\'3\',\'4\',\'5\',\'6\'\"',21,9,10,17,4);
 /*!40000 ALTER TABLE `RfidCards` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

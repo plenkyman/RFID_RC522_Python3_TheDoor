@@ -7,7 +7,7 @@
 ####	MISO- pin 21, GPIO9 ||| MOSI- pin 19, GPIO10 ||| SCK- pin 23, GPIO11
 ####	NSS- pin 24, GPIO7 ||| IRQ- Don’t Attach to rpi
 ####--------------------------------------------------------------------------------------
-####								remixed by plenkyman
+####						remixed by plenkyman  Version 8
 ##########################################################################################
 ####  			! ! THIS PROGRAM SETS UP THE CARDS, NOTHING TO MODIFY ! !
 ##########################################################################################
@@ -249,4 +249,6 @@ except BaseException as error:
     connection.commit()
     connection.close ()
 finally:    
+    printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdc.errLine +"restartdoor after SetupCards")
+    os.system(tdc.pathtoscript + "restartdoor")
     sys.exit(0)    
