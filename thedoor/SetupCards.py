@@ -40,22 +40,6 @@ GPIO.setup(tdc.d_strike, GPIO.OUT)
 GPIO.setup(tdc.d_unused, GPIO.OUT)
 GPIO.setup(tdc.d_exit, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-def powerstatus():
-    tOn = 1
-    tOff = .5
-    exz = .99
-    while 1:
-        GPIO.output(tdc.pstat, True)
-        time.sleep(tOn)
-        GPIO.output(tdc.pstat, False)
-        time.sleep(tOff)
-        tOn = tOn * exz
-        tOff = tOff * exz
-        if tOn < .015:
-           exz = 1.01
-        elif tOn >= 1:
-           exz = .99 
-
 def blink(Color,bkg = 5):
     i=0
     while i <= bkg :
@@ -120,7 +104,7 @@ def exitbutton_callback(channel) :
         printto(tdc.logf,time.strftime("%c") + " : Exit Button, Door on OverRide")
 ############# READING CARDS RC522 #############################
 class RFIDReaderWrapper(object):
-    _thread.start_new_thread(powerstatus, ())
+    #_thread.start_new_thread(powerstatus, ())
     """runs rfid reader as a subprocess & parses tag serials
     from its output
     """
@@ -160,8 +144,8 @@ OverRide = "A"
 GPIO.setwarnings(True)  
 GPIO.output(tdc.d_strike,1)
 GPIO.output(tdc.d_unused,0)
-ledsGRY(False,True,False)
-printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y")+" : ### Swipe a new card or cancel with control c ###")                        
+ledsGRY(True,True,True)
+printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y")+" : ### Swipe a card or cancel with control c ###")                        
 ####### RUNNING THE READER  #############
 try:
     if __name__ == '__main__':
@@ -185,34 +169,24 @@ try:
                 hours_wkend_end = int(row[8])
 
             if name=="":
-                print ("New card, provide a Name and chose access level or exit program: ")
-                print ("1. Edit this card ")
-                print ("2. exit program")
-                followaction = int(input("Choose 1 or 2: "))
-                if followaction == 1:
-                    nametocard = input("Enter Name of cardholder: ")
-                    print ("Chose wich type of acces right for this card: ")
-                    print ("1. House Card, access granted 24/7")
-                    print ("2. Guest Card, access by schedule")
-                    print ("3. OverRide Card, Programming")
-                    print ("4. Make House Cards, Programming")
-                    print ("5. Make Guest Cards, Programming")
-                    print ("0. Revoke this card")
-                    accesstocard = int(input("Chose 1 - 5 or 0 : "))
-                    cursor.execute("""INSERT INTO """+(tdc.dbKe)+"""(ID,name,access) VALUES ((%s),(%s),(%s))""",(serial,nametocard,accesstocard));
-                    print ("card written to database, swipe another card or quit (control c)")
-                if followaction == 2:
-                    print ("quiting Setupcards.py")
-                    sys.exit(0) 
-### known card cards
-            elif name!="": 
-                print ("This card is already registerd as: ",name," and has an accesslevel of: ",access,"")
+                _thread.start_new_thread(blink, (tdc.yellow,50))
+                print ("Swipe cards to register. control c to exit program: ")
+                nametocard = input("Enter Name of cardholder: ")
+                print ("Chose wich type of acces right for this card: ")
                 print ("1. House Card, access granted 24/7")
                 print ("2. Guest Card, access by schedule")
                 print ("3. OverRide Card, Programming")
                 print ("4. Make House Cards, Programming")
                 print ("5. Make Guest Cards, Programming")
-                print ("0. Revokek this card")
+                print ("0. Revoke this card")
+                accesstocard = int(input("Chose 1 - 5 or 0 : "))
+                cursor.execute("""INSERT INTO """+(tdc.dbKe)+"""(ID,name,access) VALUES ((%s),(%s),(%s))""",(serial,nametocard,accesstocard));
+                print ("card written to database, swipe another card or quit (control c)")
+### known card cards
+            elif name!="":
+                _thread.start_new_thread(blink, (tdc.yellow,50))
+                print ("This card is already registerd as: ",name," and has an accesslevel of: ",access,"")
+                print ("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
                 print ("Do you want to edit this card? ")
                 print ("1. Edit this card ")
                 print ("2. go back swipe a new card ")
@@ -231,7 +205,7 @@ try:
                     cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET name = (%s), access = (%s) WHERE ID = (%s)""",(nametocard,accesstocard,serial));
                     print ("card updated on database, swipe another card or quit (control c)")
                 if selectaction == 2:
-                    print ("swipe a new card or quit (control c)")
+                    print ("swipe a card or quit (control c)")
                     pass
                 if selectaction == 3:
                     print ("quiting Setupcards.py")
@@ -243,12 +217,11 @@ try:
 
 except BaseException as error:
     ledsGRY(False,False,False)
-    GPIO.output(tdc.pstat, False)
     GPIO.cleanup()
     cursor.close()
     connection.commit()
     connection.close ()
-finally:    
+finally:
     printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdc.errLine +"restartdoor after SetupCards")
     os.system(tdc.pathtoscript + "restartdoor")
     sys.exit(0)    
