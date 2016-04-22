@@ -6,7 +6,7 @@
 	MISO- pin 21, GPIO9 ||| MOSI- pin 19, GPIO10 ||| SCK- pin 23, GPIO11
 	NSS- pin 24, GPIO7 ||| IRQ- Don’t Attach to rpi
 	--------------------------------------------------------------------------------------
-			remixed by plenkyman	v7.March2016
+			            remixed by plenkyman	v8.April 2016
 #######################       thedoorpy@plenkyman.com       ##################################
 
 Hardware: Raspberry Pi, Pi Camera, Edimax USB Wifi Dongle: http://amzn.com/B00UGBI91U
@@ -24,6 +24,8 @@ installs from Florian's tutorial: bcm2835, rpi-rc522, subversion
    - RC522 RFID: VCC- pin 1, 3.3 volts | RST- pin 22, GPIO25 | GND- pins, 6, 9, 14, 20, or 25,
      MISO- pin 21, GPIO9 | MOSI- pin 19, GPIO10 | SCK- pin 23, GPIO11 | NSS- pin 24, GPIO7
      IRQ- Don’t Attach to rpi	
+	 !!!!!(you can run setdoorprefs in Terminal to assign other GPIO pins and change PiCamera
+	 settings after initial software installation)
    - install 4 LEDS (GPIO(green,red,yellow,pstat) to LED to resistor to Ground)
    - install relay (VCC to 5V+, GPIO(d_strike) to IN1, Ground to Ground)
    - install exit button (GPIO(d_exit) to NO, Ground to Ground)
@@ -45,26 +47,29 @@ Option: full install, all necessary software is installed:
   and wificountry.
 - reboot ! mandatory!
 - after rebooting to terminal:
-	1.	wget http://www.thedoor.plenkyman.com/thedoor_full_install_v7.sh
-	2.	. thedoor_full_install_v7.sh		
+	1.	wget http://www.thedoor.thedoor.plenkyman.com/thedoor_full_install_v8.sh
+	2.	. thedoor_full_install_v8.sh		
 - This will take around 20 minutes, you will have to enter a root password for mysql
   and a password for the RfidDoor database.
   The Rasperry will shut down when installation is finished.
 	
 Option: partial install, on systems that have mysql, pypy, pymysql, numpy, subversion installed:
 #########################################################################################
-- in Terminal: 1.	wget http://www.thedoor.plenkyman.com/thedoor_partial_install_v7.sh
-			   2.	. thedoor_partial_install_v7.sh	
+- in Terminal: 1.	wget http://www.thedoor.plenkyman.com/thedoor_partial_install_v8.sh
+			   2.	. thedoor_partial_install_v8.sh	
 - This will take a few minutes, you will have to enter your root password for mysql
   and a new password for the RfidDoor database.
   The Rasperry will shut down when installation is finished.
 ##########################################################################################  
-##########################################################################################  
+##########################################################################################
+### Setting GPIO pins and PiCamera settings if not standard:
+
+- run setdoorprefs in Terminal to assign other GPIO pins and change PiCamera settings
+  
 ### Setting up the cards after installation:
 
 After reboot run the SetupCards.py by running setupcards in terminal.
-Follow prompts to set name and access level. Configure the OverRide,MakeHouse & Make Guest Cards.
-You can later use these cards to program new cards while TheDoor.py is running.
+Follow prompts to set name and access level.
 
 There are 5 acces levels defined by the value of "access" in database RfidDoor table RfidCards:
 0 access revoked
