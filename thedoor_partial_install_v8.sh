@@ -6,7 +6,7 @@ echo "it requires a working mysql database, pypy, pymysql and subversion"
 sleep 1
 echo "The entire process takes a few minutes on a fast internet connection."
 sleep 1
-echo "installs: TheDoor python programs from www.plenkyman.com"
+echo "installs: TheDoor python programs from www.thedoor.plenkyman.com"
 sleep 1
 echo "installs: bcm2835-1.50 from www.airspayce.com"
 sleep 1
@@ -16,8 +16,10 @@ echo "!!! - provided free and without any guarantees - !!!"
 sleep 1
 while :
 do
-	read -p "Set a password for the mysql user root: " acheck1
-	read -p "confirm password for root: " acheck2
+	read -p "Set a password for the mysql user root: " -s acheck1
+	echo " "
+	read -p "confirm, enter password for root again: " -s acheck2
+	echo " "
 	if [ "$acheck1" == "$acheck2" ]
 	then
 		break
@@ -25,14 +27,13 @@ do
 	echo "entries do not match"
 done
 db_pw_root=$acheck1
-echo "Your recorded root password for mysql is: $db_pw_root"
-
-
 cd ~
 while :
 do
-	read -p "Set a password for the RfidDoor database for the user TheDoor: " bcheck1
-	read -p "confirm password for user TheDoor: " bcheck2
+	read -p "Set a password for the RfidDoor database for the user TheDoor: " -s bcheck1
+	echo " "
+	read -p "confirm, enter password for user TheDoor again: " -s bcheck2
+	echo " "
 	if [ "$bcheck1" == "$bcheck2" ]
 	then
 		break
@@ -75,7 +76,7 @@ mysql -D RfidDoor -u root "-p$db_pw_root" -e "flush privileges"
 echo "database installed and updated"
 sleep 2
 cd thedoor/
-sed -i "s/Schmilblick/$db_pw_thedoor/g" TheDoorConfig.py
+sed -i "s/TheCat/$db_pw_thedoor/g" TheDoorPrefs.py
 python3 TheDoorConfig.py
 sleep 2
 cd ~
