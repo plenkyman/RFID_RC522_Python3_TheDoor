@@ -1,5 +1,5 @@
 #!bin/bash
-echo "This Uninstaller will remove all files from Thedoor"
+echo "This Uninstaller will remove all files from the program Thedoor"
 echo "The apt-get and subversion modules installed will remain!"
 read -p "Enter the mysql database root password: " -s db_pw_root
 echo " "
@@ -12,7 +12,8 @@ rm -rf ~/rpi-rc522-read-only/
 rm ~/.doorconf
 rm ~/.bash_aliases
 sudo rm /etc/cron.d/doorcrons
-echo "all removed!"
+echo "TheDoor and its files are removed from this system"
 rm thedoor_uninstaller_v*
 echo "the pi will restart in 60 seconds"
-sudo shutdown -r +1
+sleep 60
+sudo reboot
