@@ -12,8 +12,8 @@ rm -rf ~/rpi-rc522-read-only/
 rm ~/.doorconf
 rm ~/.bash_aliases
 sudo rm /etc/cron.d/doorcrons
-echo "TheDoor and its files are removed from this system"
+echo "TheDoor and its files are removed from this system."
 rm thedoor_uninstaller_v*
-echo "the pi will restart in 60 seconds"
+echo "the pi will restart in 60 seconds."
 sleep 60
 sudo reboot
