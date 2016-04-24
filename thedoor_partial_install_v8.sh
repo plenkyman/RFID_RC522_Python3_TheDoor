@@ -81,5 +81,6 @@ python3 TheDoorConfig.py
 sleep 2
 cd ~
 rm thedoor_partial_install_v*
-echo "the pi will restart in 60 seconds"
-sudo shutdown -r +1
+echo "the pi will restart in 60 seconds."
+sleep 60
+sudo reboot

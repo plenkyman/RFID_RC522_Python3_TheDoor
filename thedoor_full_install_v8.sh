@@ -86,7 +86,10 @@ cd thedoor/
 sed -i "s/TheCat/$db_pw_thedoor/g" TheDoorPrefs.py
 python3 TheDoorConfig.py
 sleep 2
+echo "TheDoor preferences set."
+
 cd ~
 rm thedoor_full_install_v*
-echo "the pi will restart in 60 seconds"
-sudo shutdown -r +1
+echo "the pi will restart in 60 seconds."
+sleep 60
+sudo reboot

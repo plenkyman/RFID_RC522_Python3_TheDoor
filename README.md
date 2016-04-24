@@ -6,7 +6,8 @@ based on http://bsd.ee/~hadara/blog/?p=1017&cpage=1
 remixed by plenkyman	v.7.March2016
 
 Hardware:
-Raspberry Pi, Pi Camera, Edimax USB Wifi Dongle: http://amzn.com/B00UGBI91U,
+Raspberry Pi & Pi Camera,
+Edimax USB Wifi Dongle: http://amzn.com/B00UGBI91U,
 RFID-RC522: http://amzn.com/B016BLFMMW,
 Relay: http://amzn.com/B00E0NTPP4,
 Electric Strike: http://amzn.com/B00V49S65M,
@@ -28,7 +29,8 @@ Guest Cards give access by weekday and weekend schedule.
 The OverRide card disables access control and opens the lock permanently.
 Swipe the card once more to enable access control again.
 
-If a PiCamera is installed and enabled in TheDoorConfig.py it takes pictures when:
+If a PiCamera is installed and enabled in TheDoorConfig.py it takes pictures
+when:
 access is denied because of a revoked, out of schedule or unknown card.
 Pictures are stored in ~/thedoor/images.
 
@@ -39,17 +41,20 @@ To see all registered cards use terminal command dbcards.
 
 all newly available commands:
 
-- restartdoo	 : - tries to quit the reader and the python file then restarts them again
-- quitdoo	 : - quits the rc522_reader and the python program
-- restartpi0	 : - restarts pi and starts the door at boot 
-- dbdoor	 : - shows attendance, the last 100 entries of mysql database table AccLog 
-- dbcard	 : - shows registered cards, mysql database table RfidCards all cards
-- lp		 : - shows logs of the custom scripts executed   
-- ldoo		 : - shows logs of attendance
-- cleanlog	 : - erases all but the last 500 lines of lpi and ldoor
-- backupdoo	 : - backs up to another machine by rsync if path and login are defined in TheDoorConfig.py,
-			wait for command line prompt to enter password.
-- resetconfi	 : - reset TheDoorConfig file and create doorconf, run after changes in TheDoorConfig.py,
-			then run restartdoor.
-- setupcard	 : - use this to setup the first 4 cards as programming cards	
-- setdoorprefs	 : - Set GPIO pins and PiCam settings
+- restartdoor	 : - tries to quit the reader and the python file then restarts
+									 them again
+- quitdoo	 		 : - quits the rc522_reader and the python program
+- restartpi01	 : - restarts pi and starts the door at boot
+- dbdoor	 		 : - shows attendance, the last 100 entries of mysql database
+							 table AccLog
+- dbcard	 		 : - shows registered cards, mysql table RfidCards all cards
+- lpi		 			 : - shows logs of the custom scripts executed   
+- ldoor				 : - shows logs of attendance
+- cleanlogs		 : - erases all but the last 500 lines of lpi and ldoor
+- backupdoor	 : - backs up to another machine by rsync if path and login are
+									 defined in TheDoorConfig.py, wait for command line prompt
+									 to enter password.
+- resetconfig	 : - reset TheDoorConfig file and create doorconf, run after
+									 changes in TheDoorConfig.py, then run restartdoor.
+- setupcards	 : - use this to setup the first 4 cards as programming cards
+- setdoorprefs : - Set GPIO pins and PiCam settings
