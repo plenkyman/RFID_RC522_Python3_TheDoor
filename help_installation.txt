@@ -128,5 +128,5 @@ setupcards		use this to setup the first 4 cards as programming cards
 
 Uninstall, remove program:
 #################################################################################
-Terminal 1. wget http://www.thedoor.plenkyman.com/thedoor_uninstaller_v7.sh
-	 2. . thedoor_uninstaller_v7.sh
+Terminal 1. wget http://www.thedoor.plenkyman.com/thedoor_uninstaller_v8.sh
+	 2. . thedoor_uninstaller_v8.sh
