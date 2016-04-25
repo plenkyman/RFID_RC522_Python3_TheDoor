@@ -3,7 +3,7 @@ Access System based on a raspberry pi, RC522 Rfid reader, python3
 
 Copyright 2014 (BSD License) Credits:  Florian Otto(Solider) and hadara
 based on http://bsd.ee/~hadara/blog/?p=1017&cpage=1
-remixed by plenkyman	v.7.March2016
+remixed by plenkyman	v.8. April 2016
 
 Hardware:
 Raspberry Pi & Pi Camera,
