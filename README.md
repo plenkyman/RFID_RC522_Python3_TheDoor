@@ -1,4 +1,4 @@
-# RFID_RC522_Python3_TheDoor
+# RFID RC522 Python3 TheDoor
 Access System based on a raspberry pi, RC522 Rfid reader, python3
 
 Copyright 2014 (BSD License) Credits:  Florian Otto(Solider) and hadara
