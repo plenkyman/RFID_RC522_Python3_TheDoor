@@ -19,7 +19,7 @@ done
 sed -i "s/$VAR2$VAR3/$VAR2$Answer/g" ~/thedoor/TheDoorPrefs.py
 }
 ##------------------  Sets the variable in the source file ------------------##
-##called with 7 arguments: variable name doublequoted, explaining text doublequoted, choices ##
+##called with max 7 arguments: variable name doublequoted, explaining text doublequoted, choices ##
 setCam () {
 VAR1=$1
 VAR2=$1"="
@@ -72,10 +72,10 @@ exit
 done
 ###-----------------------------------------------------------------------###
 if whiptail --yesno "Do you want to edit the GPIO assignment?" 20 60 ;then
-setGPIO $"green" $"Set GPIO for green LED: " 
-setGPIO $"red" $"Set GPIO for red LED: " 
-setGPIO $"yellow" $"Set GPIO for yellow LED: " 
-setGPIO $"pstat" $"Set GPIO for powerstatus LED: " 
+setGPIO $"green" $"Set GPIO for green LED: "
+setGPIO $"red" $"Set GPIO for red LED: "
+setGPIO $"yellow" $"Set GPIO for yellow LED: "
+setGPIO $"pstat" $"Set GPIO for powerstatus LED: "
 setGPIO $"d_strike" $"Set GPIO for the door strike: "
 setGPIO $"d_exit" $"Set GPIO for the exit button: "
 setGPIO $"d_time" $"Set # of seconds lock stays open: "
