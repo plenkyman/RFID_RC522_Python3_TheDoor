@@ -56,5 +56,5 @@ all newly available commands:
 									 to enter password.
 - resetconfig	 : - reset TheDoorConfig file and create doorconf, run after
 									 changes in TheDoorConfig.py, then run restartdoor.
-- setupcards	 : - use this to setup the first 4 cards as programming cards
+- setupcards	 : - setting up cards, Name and Access Level
 - setdoorprefs : - Set GPIO pins and PiCam settings
