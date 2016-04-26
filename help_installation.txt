@@ -124,7 +124,7 @@ backupdoor		backs up to another machine by rsync if path and login are defined i
 				wait for command line prompt to enter password.
 resetconfig		reset TheDoorConfig file and create doorconf, run after changes in TheDoorConfig.py,
 				then run restartdoor.
-setupcards		use this to setup the first 4 cards as programming cards		
+setupcards		setting up cards, Name and Access Level		
 
 Uninstall, remove program:
 #################################################################################
