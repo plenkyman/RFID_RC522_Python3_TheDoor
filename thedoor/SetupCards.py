@@ -11,7 +11,7 @@
 ##########################################################################################
 ####  			! ! THIS PROGRAM SETS UP THE CARDS, NOTHING TO MODIFY ! !
 ##########################################################################################
-import TheDoorConfig as tdc
+import TheDoorPrefs as tdp
 import shlex
 import subprocess
 import sys
@@ -23,22 +23,22 @@ import pymysql
 import RPi.GPIO as GPIO
 import _thread
 ### enter boot up in database
-connection = pymysql.connect(host=tdc.rpi_ip,unix_socket='/var/run/mysqld/mysqld.sock', user=tdc.dbUs, passwd=tdc.dbPW, db=tdc.dbNa)
+connection = pymysql.connect(host=tdp.rpi_ip,unix_socket='/var/run/mysqld/mysqld.sock', user=tdp.dbUs, passwd=tdp.dbPW, db=tdp.dbNa)
 cursor = connection.cursor()
-cursor.execute("""INSERT INTO """+(tdc.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),'python','pi01 at boot','program booted')""")
+cursor.execute("""INSERT INTO """+(tdp.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),'python','pi01 at boot','program booted')""")
 cursor.close()
 connection.commit()
 connection.close ()
 ### initial setup
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(tdc.green, GPIO.OUT) 
-GPIO.setup(tdc.red, GPIO.OUT) 
-GPIO.setup(tdc.yellow, GPIO.OUT) 
-GPIO.setup(tdc.pstat,GPIO.OUT)
-GPIO.setup(tdc.d_strike, GPIO.OUT)
-GPIO.setup(tdc.d_unused, GPIO.OUT)
-GPIO.setup(tdc.d_exit, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(tdp.green, GPIO.OUT)
+GPIO.setup(tdp.red, GPIO.OUT)
+GPIO.setup(tdp.yellow, GPIO.OUT)
+GPIO.setup(tdp.pstat,GPIO.OUT)
+GPIO.setup(tdp.d_strike, GPIO.OUT)
+GPIO.setup(tdp.d_unused, GPIO.OUT)
+GPIO.setup(tdp.d_exit, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def blink(Color,bkg = 5):
     i=0
@@ -53,22 +53,22 @@ def blink(Color,bkg = 5):
     ledsGRY(False,True,False)
 
 def ledsGRY(st1,st2,st3):
-    GPIO.output(tdc.green,st1)
-    GPIO.output(tdc.red,st2)
-    GPIO.output(tdc.yellow,st3)
+    GPIO.output(tdp.green,st1)
+    GPIO.output(tdp.red,st2)
+    GPIO.output(tdp.yellow,st3)
 
 def printto(wichlog,*args):
     for arg in args:
         print (arg),
-    
+
 
 def takepict(fn,err):
-    if tdc.OnOffPiCam == "on":
+    if tdp.OnOffPiCam == "on":
         camera = picamera.PiCamera()
-        camera.exposure_mode = tdc.picem
-        camera.rotation = tdc.camrot
+        camera.exposure_mode = tdp.picem
+        camera.rotation = tdp.camrot
         time.sleep(.1)
-        camera.capture(tdc.path_to_pics+time.strftime("%y-%m-%d_%H:%M:%S")+'_'+fn+'_'+err+'.'+tdc.camff)
+        camera.capture(tdp.path_to_pics+time.strftime("%y-%m-%d_%H:%M:%S")+'_'+fn+'_'+err+'.'+tdp.camff)
         camera.close()
     else: return None
 
@@ -85,23 +85,23 @@ def scheduled_access(weekdays):
         return False
 
 def opendoor():
-    GPIO.remove_event_detect(tdc.d_exit)
-    GPIO.output(tdc.d_strike,0)
-    time.sleep(tdc.d_time)
-    GPIO.output(tdc.d_strike,1)
-    GPIO.add_event_detect(tdc.d_exit, GPIO.FALLING, callback = exitbutton_callback, bouncetime = (tdc.d_time * 1000) + 500)
+    GPIO.remove_event_detect(tdp.d_exit)
+    GPIO.output(tdp.d_strike,0)
+    time.sleep(tdp.d_time)
+    GPIO.output(tdp.d_strike,1)
+    GPIO.add_event_detect(tdp.d_exit, GPIO.FALLING, callback = exitbutton_callback, bouncetime = (tdp.d_time * 1000) + 500)
 
 def exitbutton_callback(channel) :
-    GPIO.output(tdc.d_strike,0)
+    GPIO.output(tdp.d_strike,0)
     if OverRide == "A":
         ledsGRY(False,False,False)
-        _thread.start_new_thread(blink, (tdc.green,42))
-        printto(tdc.logf,time.strftime("%c")+ " : Exit Button")
-        time.sleep(tdc.d_time)
-        GPIO.output(tdc.d_strike,1)
+        _thread.start_new_thread(blink, (tdp.green,42))
+        printto(tdp.logf,time.strftime("%c")+ " : Exit Button")
+        time.sleep(tdp.d_time)
+        GPIO.output(tdp.d_strike,1)
         ledsGRY(False,True,False)
     else:
-        printto(tdc.logf,time.strftime("%c") + " : Exit Button, Door on OverRide")
+        printto(tdp.logf,time.strftime("%c") + " : Exit Button, Door on OverRide")
 ############# READING CARDS RC522 #############################
 class RFIDReaderWrapper(object):
     #_thread.start_new_thread(powerstatus, ())
@@ -141,22 +141,22 @@ class RFIDReaderWrapper(object):
             return serial
 ####### SET STATE TO BEGIN  #############
 OverRide = "A"
-GPIO.setwarnings(True)  
-GPIO.output(tdc.d_strike,1)
-GPIO.output(tdc.d_unused,0)
+GPIO.setwarnings(True)
+GPIO.output(tdp.d_strike,1)
+GPIO.output(tdp.d_unused,0)
 ledsGRY(True,True,True)
-printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y")+" : ### Swipe a card or cancel with control c ###")                        
+printto(tdp.logpi,time.strftime("%H:%M:%S-%m-%d-%y")+" : ### Swipe a card or cancel with control c ###")
 ####### RUNNING THE READER  #############
 try:
     if __name__ == '__main__':
-        reader = RFIDReaderWrapper("sudo nohup "+tdc.p2r+"/rc522_reader -d 2>&1")
+        reader = RFIDReaderWrapper("sudo nohup "+tdp.p2r+"/rc522_reader -d 2>&1")
         name=""
-        GPIO.add_event_detect(tdc.d_exit, GPIO.FALLING, callback = exitbutton_callback, bouncetime = (tdc.d_time * 1000) + 500)
+        GPIO.add_event_detect(tdp.d_exit, GPIO.FALLING, callback = exitbutton_callback, bouncetime = (tdp.d_time * 1000) + 500)
         while True:
-            connection = pymysql.connect(host=tdc.rpi_ip,unix_socket='/var/run/mysqld/mysqld.sock', user=tdc.dbUs, passwd=tdc.dbPW, db=tdc.dbNa)
+            connection = pymysql.connect(host=tdp.rpi_ip,unix_socket='/var/run/mysqld/mysqld.sock', user=tdp.dbUs, passwd=tdp.dbPW, db=tdp.dbNa)
             cursor = connection.cursor()
             serial = reader.read_tag_serial()
-            cursor.execute("""SELECT name,acc_group,counter,access,weekdays,hours_wk_st,hours_wk_end,hours_wkend_st,hours_wkend_end FROM """+(tdc.dbKe)+""" WHERE ID=(%s)""", (serial))
+            cursor.execute("""SELECT name,acc_group,counter,access,weekdays,hours_wk_st,hours_wk_end,hours_wkend_st,hours_wkend_end FROM """+(tdp.dbKe)+""" WHERE ID=(%s)""", (serial))
             for row in cursor.fetchall():
                 name = str(row[0])
                 acc_group = str(row[1])
@@ -169,7 +169,7 @@ try:
                 hours_wkend_end = int(row[8])
 
             if name=="":
-                _thread.start_new_thread(blink, (tdc.yellow,50))
+                _thread.start_new_thread(blink, (tdp.yellow,50))
                 print ("Swipe cards to register. control c to exit program: ")
                 nametocard = input("Enter Name of cardholder: ")
                 print ("Chose wich type of acces right for this card: ")
@@ -180,11 +180,11 @@ try:
                 print ("5. Make Guest Cards, Programming")
                 print ("0. Revoke this card")
                 accesstocard = int(input("Chose 1 - 5 or 0 : "))
-                cursor.execute("""INSERT INTO """+(tdc.dbKe)+"""(ID,name,access) VALUES ((%s),(%s),(%s))""",(serial,nametocard,accesstocard));
+                cursor.execute("""INSERT INTO """+(tdp.dbKe)+"""(ID,name,access) VALUES ((%s),(%s),(%s))""",(serial,nametocard,accesstocard));
                 print ("card written to database, swipe another card or quit (control c)")
 ### known card cards
             elif name!="":
-                _thread.start_new_thread(blink, (tdc.yellow,50))
+                _thread.start_new_thread(blink, (tdp.yellow,50))
                 print ("This card is already registerd as: ",name," and has an accesslevel of: ",access,"")
                 print ("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
                 print ("Do you want to edit this card? ")
@@ -202,14 +202,14 @@ try:
                     print ("5. Make Guest Cards, Programming")
                     print ("0. Revoke this card")
                     accesstocard = int(input("Chose 1 - 5 or 0 : "))
-                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET name = (%s), access = (%s) WHERE ID = (%s)""",(nametocard,accesstocard,serial));
+                    cursor.execute("""UPDATE """+(tdp.dbKe)+""" SET name = (%s), access = (%s) WHERE ID = (%s)""",(nametocard,accesstocard,serial));
                     print ("card updated on database, swipe another card or quit (control c)")
                 if selectaction == 2:
                     print ("swipe a card or quit (control c)")
                     pass
                 if selectaction == 3:
                     print ("quiting Setupcards.py")
-                    sys.exit(0) 
+                    sys.exit(0)
             cursor.close()
             connection.commit()
             connection.close ()
@@ -222,6 +222,6 @@ except BaseException as error:
     connection.commit()
     connection.close ()
 finally:
-    printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdc.errLine +"restartdoor after SetupCards")
-    os.system(tdc.pathtoscript + "restartdoor")
-    sys.exit(0)    
+    printto(tdp.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdp.errLine +"restartdoor after SetupCards")
+    os.system(tdp.pathtoscript + "restartdoor")
+    sys.exit(0)
