@@ -26,7 +26,8 @@ installs from Florian's tutorial: bcm2835, rpi-rc522, subversion
      IRQ- Don’t Attach to rpi	
 	 !!!!!(you can run setdoorprefs in Terminal to assign other GPIO pins and change PiCamera
 	 settings after initial software installation)
-   - install 4 LEDS (GPIO(green,red,yellow,pstat) to LED to resistor to Ground)
+   - install 4 LEDS green = pin 7,GPIO.BOARD, red = pin 8,GPIO.BOARD, yellow = pin 11,GPIO.BOARD,
+     pstat = pin 13,GPIO.BOARD, to LED to resistor to Ground
    - install relay (VCC to 5V+, GPIO(d_strike) to IN1, Ground to Ground)
    - install exit button (GPIO(d_exit) to NO, Ground to Ground)
 
