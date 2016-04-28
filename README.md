@@ -57,4 +57,4 @@ all newly available commands:
 - resetconfig	 : - reset TheDoorConfig file and create doorconf, run after
 									 changes in TheDoorConfig.py, then run restartdoor.
 - setupcards	 : - setting up cards, Name and Access Level
-- setdoorprefs : - Set GPIO pins and PiCam settings
+- setdoorprefs : - Set GPIO pins for LED's, strike and exitbutton and PiCam settings
