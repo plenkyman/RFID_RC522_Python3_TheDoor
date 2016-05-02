@@ -72,7 +72,7 @@ Option: partial install, on systems that have mysql, pypy, pymysql, numpy, subve
 After reboot run the SetupCards.py by running setupcards in terminal.
 Follow prompts to set name and access level.
 
-There are 5 acces levels defined by the value of "access" in database RfidDoor table RfidCards:
+There are 5 access levels defined by the value of "access" in database RfidDoor table RfidCards:
 0 access revoked
 1 access granted 24/7 ( the entries for schedules are not evaluated for these cards)
 2 accces granted by schedules (weekdays and weekends)
