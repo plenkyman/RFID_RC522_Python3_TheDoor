@@ -22,28 +22,6 @@ import datetime
 import pymysql
 import RPi.GPIO as GPIO
 import _thread
-# ####enter boot up in database and check for state of OverRide
-# connection = pymysql.connect(host=tdc.rpi_ip,unix_socket='/var/run/mysqld/mysqld.sock', user=tdc.dbUs, passwd=tdc.dbPW, db=tdc.dbNa)
-# cursor = connection.cursor()
-# cursor.execute("""SELECT id,err FROM """+(tdc.dbAc)+""" WHERE id=(select max(ID))""")
-# for row in cursor.fetchall():
-#     checkstateid = str(row[0])
-#     checkstate = str(row[1])
-# if checkstate == "OverRide_OPEN" :
-#     OverRide = "B"
-#     cursor.execute("""INSERT INTO """+(tdc.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),'python','pi01 at boot','OverRide_OPEN')""")
-#     cursor.close()
-#     connection.commit()
-#     connection.close ()
-#     GPIO.output(tdc.d_strike,0)
-#     printto(tdc.logf,time.strftime("%c")+" : manual override, Door is OPEN!")
-#     ledsGRY(True,True,True)
-# else:
-#     OverRide = "A"                
-#     cursor.execute("""INSERT INTO """+(tdc.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),'python','pi01 at boot','program booted')""")
-#     cursor.close()
-#     connection.commit()
-#     connection.close ()
 ### initial setup
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
