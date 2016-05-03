@@ -75,6 +75,7 @@ if whiptail --yesno "Do you want to edit the GPIO assignment?" 20 60 ;then
 setGPIO $"green" $"Set GPIO for green LED: "
 setGPIO $"red" $"Set GPIO for red LED: "
 setGPIO $"yellow" $"Set GPIO for yellow LED: "
+setGPIO $"white" $"Set GPIO for white LED: "
 setGPIO $"pstat" $"Set GPIO for powerstatus LED: "
 setGPIO $"d_strike" $"Set GPIO for the door strike: "
 setGPIO $"d_exit" $"Set GPIO for the exit button: "
