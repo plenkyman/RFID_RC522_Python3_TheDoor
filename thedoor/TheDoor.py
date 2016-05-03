@@ -11,7 +11,7 @@
 ##########################################################################################
 ####  			! ! THIS PROGRAM RUNS THE READER, NOTHING TO MODIFY ! !
 ##########################################################################################
-import TheDooPrefs as tdp
+import TheDoorConfig as tdc
 import shlex
 import subprocess
 import sys
@@ -22,39 +22,54 @@ import datetime
 import pymysql
 import RPi.GPIO as GPIO
 import _thread
-### enter boot up in database
-connection = pymysql.connect(host=tdp.rpi_ip,unix_socket='/var/run/mysqld/mysqld.sock', user=tdp.dbUs, passwd=tdp.dbPW, db=tdp.dbNa)
-cursor = connection.cursor()
-cursor.execute("""INSERT INTO """+(tdp.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),'python','pi01 at boot','program booted')""")
-cursor.close()
-connection.commit()
-connection.close ()
+# ####enter boot up in database and check for state of OverRide
+# connection = pymysql.connect(host=tdc.rpi_ip,unix_socket='/var/run/mysqld/mysqld.sock', user=tdc.dbUs, passwd=tdc.dbPW, db=tdc.dbNa)
+# cursor = connection.cursor()
+# cursor.execute("""SELECT id,err FROM """+(tdc.dbAc)+""" WHERE id=(select max(ID))""")
+# for row in cursor.fetchall():
+#     checkstateid = str(row[0])
+#     checkstate = str(row[1])
+# if checkstate == "OverRide_OPEN" :
+#     OverRide = "B"
+#     cursor.execute("""INSERT INTO """+(tdc.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),'python','pi01 at boot','OverRide_OPEN')""")
+#     cursor.close()
+#     connection.commit()
+#     connection.close ()
+#     GPIO.output(tdc.d_strike,0)
+#     printto(tdc.logf,time.strftime("%c")+" : manual override, Door is OPEN!")
+#     ledsGRY(True,True,True)
+# else:
+#     OverRide = "A"                
+#     cursor.execute("""INSERT INTO """+(tdc.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),'python','pi01 at boot','program booted')""")
+#     cursor.close()
+#     connection.commit()
+#     connection.close ()
 ### initial setup
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(tdp.green, GPIO.OUT)
-GPIO.setup(tdp.red, GPIO.OUT)
-GPIO.setup(tdp.yellow, GPIO.OUT)
-GPIO.setup(tdp.pstat,GPIO.OUT)
-GPIO.setup(tdp.d_strike, GPIO.OUT)
-GPIO.setup(tdp.d_unused, GPIO.OUT)
-GPIO.setup(tdp.d_exit, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(tdc.green, GPIO.OUT) 
+GPIO.setup(tdc.red, GPIO.OUT) 
+GPIO.setup(tdc.yellow, GPIO.OUT) 
+GPIO.setup(tdc.pstat,GPIO.OUT)
+GPIO.setup(tdc.d_strike, GPIO.OUT)
+GPIO.setup(tdc.d_unused, GPIO.OUT)
+GPIO.setup(tdc.d_exit, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 def powerstatus():
     tOn = 1
     tOff = .5
     exz = .99
     while 1:
-        GPIO.output(tdp.pstat, True)
+        GPIO.output(tdc.pstat, True)
         time.sleep(tOn)
-        GPIO.output(tdp.pstat, False)
+        GPIO.output(tdc.pstat, False)
         time.sleep(tOff)
         tOn = tOn * exz
         tOff = tOff * exz
         if tOn < .015:
            exz = 1.01
         elif tOn >= 1:
-           exz = .99
+           exz = .99 
 
 def blink(Color,bkg = 5):
     i=0
@@ -69,15 +84,15 @@ def blink(Color,bkg = 5):
     ledsGRY(False,True,False)
 
 def ledsGRY(st1,st2,st3):
-    GPIO.output(tdp.green,st1)
-    GPIO.output(tdp.red,st2)
-    GPIO.output(tdp.yellow,st3)
+    GPIO.output(tdc.green,st1)
+    GPIO.output(tdc.red,st2)
+    GPIO.output(tdc.yellow,st3)
 
 def printto(wichlog,*args):
-    if tdp.p2 == "terminal":
+    if tdc.p2 == "terminal":
         for arg in args:
             print (arg),
-    elif tdp.p2 == "file":
+    elif tdc.p2 == "file":
         fh = open(wichlog,"a")
         for arg in args:
             print (arg, file=fh),
@@ -85,12 +100,12 @@ def printto(wichlog,*args):
     else: pass
 
 def takepict(fn,err):
-    if tdp.OnOffPiCam == "on":
+    if tdc.OnOffPiCam == "on":
         camera = picamera.PiCamera()
-        camera.exposure_mode = tdp.picem
-        camera.rotation = tdp.camrot
+        camera.exposure_mode = tdc.picem
+        camera.rotation = tdc.camrot
         time.sleep(.1)
-        camera.capture(tdp.path_to_pics+time.strftime("%y-%m-%d_%H:%M:%S")+'_'+fn+'_'+err+'.'+tdp.camff)
+        camera.capture(tdc.path_to_pics+time.strftime("%y-%m-%d_%H:%M:%S")+'_'+fn+'_'+err+'.'+tdc.camff)
         camera.close()
     else: return None
 
@@ -107,23 +122,24 @@ def scheduled_access(weekdays):
         return False
 
 def opendoor():
-    GPIO.remove_event_detect(tdp.d_exit)
-    GPIO.output(tdp.d_strike,0)
-    time.sleep(tdp.d_time)
-    GPIO.output(tdp.d_strike,1)
-    GPIO.add_event_detect(tdp.d_exit, GPIO.FALLING, callback = exitbutton_callback, bouncetime = (tdp.d_time * 1000) + 500)
+    GPIO.remove_event_detect(tdc.d_exit)
+    GPIO.output(tdc.d_strike,0)
+    time.sleep(tdc.d_time)
+    GPIO.output(tdc.d_strike,1)
+    GPIO.add_event_detect(tdc.d_exit, GPIO.FALLING, callback = exitbutton_callback, bouncetime = (tdc.d_time * 1000) + 500)
 
 def exitbutton_callback(channel) :
-    GPIO.output(tdp.d_strike,0)
+    GPIO.output(tdc.d_strike,0)
     if OverRide == "A":
         ledsGRY(False,False,False)
-        _thread.start_new_thread(blink, (tdp.green,42))
-        printto(tdp.logf,time.strftime("%c")+ " : Exit Button")
-        time.sleep(tdp.d_time)
-        GPIO.output(tdp.d_strike,1)
+        _thread.start_new_thread(blink, (tdc.green,42))
+        printto(tdc.logf,time.strftime("%c")+ " : Exit Button")
+        time.sleep(tdc.d_time)
+        GPIO.output(tdc.d_strike,1)
         ledsGRY(False,True,False)
     else:
-        printto(tdp.logf,time.strftime("%c") + " : Exit Button, Door on OverRide")
+        printto(tdc.logf,time.strftime("%c") + " : Exit Button, Door on OverRide")
+        
 ############# READING CARDS RC522 #############################
 class RFIDReaderWrapper(object):
     _thread.start_new_thread(powerstatus, ())
@@ -162,31 +178,54 @@ class RFIDReaderWrapper(object):
             serial = line.split()[-1].split("=", 1)[1]
             return serial
 ####### SET STATE TO BEGIN  #############
-OverRide = "A"
-GPIO.setwarnings(True)
-GPIO.output(tdp.d_strike,1)
-GPIO.output(tdp.d_unused,0)
+GPIO.setwarnings(True)  
+GPIO.output(tdc.d_strike,1)
+GPIO.output(tdc.d_unused,0)
 ledsGRY(False,True,False)
-printto(tdp.logpi,time.strftime("%H:%M:%S-%m-%d-%y")+" : ### initialized and booted ###")
+printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y")+" : ### initialized and booted ###")                        
+
+####enter boot up in database and check for state of OverRide
+connection = pymysql.connect(host=tdc.rpi_ip,unix_socket='/var/run/mysqld/mysqld.sock', user=tdc.dbUs, passwd=tdc.dbPW, db=tdc.dbNa)
+cursor = connection.cursor()
+cursor.execute("""SELECT id,err FROM """+(tdc.dbAc)+""" WHERE id=(select max(ID))""")
+for row in cursor.fetchall():
+    checkstateid = str(row[0])
+    checkstate = str(row[1])
+if checkstate == "OverRide_OPEN" :
+    OverRide = "B"
+    cursor.execute("""INSERT INTO """+(tdc.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),'python','pi01 at boot','OverRide_OPEN')""")
+    cursor.close()
+    connection.commit()
+    connection.close ()
+    GPIO.output(tdc.d_strike,0)
+    printto(tdc.logf,time.strftime("%c")+" : manual override, Door is OPEN!")
+    ledsGRY(True,True,True)
+else:
+    OverRide = "A"                
+    cursor.execute("""INSERT INTO """+(tdc.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),'python','pi01 at boot','program booted')""")
+    cursor.close()
+    connection.commit()
+    connection.close ()
+
 ####### RUNNING THE READER  #############
 try:
     if __name__ == '__main__':
-        reader = RFIDReaderWrapper("sudo nohup "+tdp.p2r+"/rc522_reader -d 2>&1")
+        reader = RFIDReaderWrapper("sudo nohup "+tdc.p2r+"/rc522_reader -d 2>&1")
         name=""
-        GPIO.add_event_detect(tdp.d_exit, GPIO.FALLING, callback = exitbutton_callback, bouncetime = (tdp.d_time * 1000) + 500)
+        GPIO.add_event_detect(tdc.d_exit, GPIO.FALLING, callback = exitbutton_callback, bouncetime = (tdc.d_time * 1000) + 500)
         while True:
-            connection = pymysql.connect(host=tdp.rpi_ip,unix_socket='/var/run/mysqld/mysqld.sock', user=tdp.dbUs, passwd=tdp.dbPW, db=tdp.dbNa)
+            connection = pymysql.connect(host=tdc.rpi_ip,unix_socket='/var/run/mysqld/mysqld.sock', user=tdc.dbUs, passwd=tdc.dbPW, db=tdc.dbNa)
             cursor = connection.cursor()
             serial = reader.read_tag_serial()
-### uncomment for special cards,  do not need to be registered.
+### uncomment for special cards,  do not need to be registered in database.
 #             if serial=="[44e9825a]":
-#                 printto(tdp.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdp.errLine + " : TheDoor restarted by card")
-#                 os.system(tdp.pathtoscript + "restartdoor")
+#                 printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdc.errLine + " : TheDoor restarted by card")
+#                 os.system(tdc.pathtoscript + "restartdoor")
 #             if serial=="[94be7d5a]":
-#                 printto(tdp.logpi,time.strftime("%H:%M:%S-%m-%d-%y") +" : " + tdp.errLine + " : pi01 rebooted by card")
-#                 os.system(tdp.pathtoscript + "restartpi01")
+#                 printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y") +" : " + tdc.errLine + " : pi01 rebooted by card")
+#                 os.system(tdc.pathtoscript + "restartpi01")
 
-            cursor.execute("""SELECT name,acc_group,counter,access,weekdays,hours_wk_st,hours_wk_end,hours_wkend_st,hours_wkend_end FROM """+(tdp.dbKe)+""" WHERE ID=(%s)""", (serial))
+            cursor.execute("""SELECT name,acc_group,counter,access,weekdays,hours_wk_st,hours_wk_end,hours_wkend_st,hours_wkend_end FROM """+(tdc.dbKe)+""" WHERE ID=(%s)""", (serial))
             for row in cursor.fetchall():
                 name = str(row[0])
                 acc_group = str(row[1])
@@ -202,101 +241,101 @@ try:
 ### access for house cards
                 if access == 1 and OverRide == "A":
                     ledsGRY(True,False,False)
-                    printto(tdp.logf,time.strftime("%c")+" : . . "+name)
-                    _thread.start_new_thread(blink, (tdp.green,50))
+                    printto(tdc.logf,time.strftime("%c")+" : . . "+name)
+                    _thread.start_new_thread(blink, (tdc.green,50))
                     opendoor()
-                    cursor.execute("""UPDATE """+(tdp.dbKe)+""" SET counter = counter + 1 WHERE ID = (%s)""",(serial));
-                    cursor.execute("""INSERT INTO """+(tdp.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),(%s))""",(serial,name,acc_group))
+                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET counter = counter + 1 WHERE ID = (%s)""",(serial));
+                    cursor.execute("""INSERT INTO """+(tdc.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),(%s))""",(serial,name,acc_group))
 ### access for members cards
                 elif access == 2 and OverRide == "A" and scheduled_access(weekdays) is True:
                     ledsGRY(True,False,False)
-                    printto(tdp.logf,time.strftime("%c")+" : . . . . "+name)
-                    _thread.start_new_thread(blink, (tdp.green,50))
+                    printto(tdc.logf,time.strftime("%c")+" : . . . . "+name)
+                    _thread.start_new_thread(blink, (tdc.green,50))
                     opendoor()
-                    cursor.execute("""UPDATE """+(tdp.dbKe)+""" SET counter = counter + 1 WHERE ID = (%s)""",(serial));
-                    cursor.execute("""INSERT INTO """+(tdp.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),(%s))""",(serial,name,acc_group))
+                    cursor.execute("""UPDATE """+(tdc.dbKe)+""" SET counter = counter + 1 WHERE ID = (%s)""",(serial));
+                    cursor.execute("""INSERT INTO """+(tdc.dbAc)+"""(id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),(%s))""",(serial,name,acc_group))
 ### out of schedule members
                 elif access == 2 and OverRide == "A" and scheduled_access(weekdays) is False:
                     ledsGRY(True,False,False)
-                    _thread.start_new_thread(blink, (tdp.red,30))
+                    _thread.start_new_thread(blink, (tdc.red,30))
                     _thread.start_new_thread(takepict, (name,"NoAccess"))
-                    cursor.execute("""INSERT INTO """+(tdp.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),'NoAccess')""",(serial,name))
-                    printto(tdp.logf,time.strftime("%c")+ " : " + tdp.errLine + name + ",you don't have access at this time.")
+                    cursor.execute("""INSERT INTO """+(tdc.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),'NoAccess')""",(serial,name))
+                    printto(tdc.logf,time.strftime("%c")+ " : " + tdc.errLine + name + ",you don't have access at this time.")
 ### revoked card
                 elif access == 0 and OverRide == "A":
-                    _thread.start_new_thread(blink, (tdp.red,50))
-                    printto(tdp.logf,time.strftime("%c") +  " : " + tdp.errLine + ": revoked card!")
-                    cursor.execute("""INSERT INTO """+(tdp.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),'RevokedCard')""",(serial,name))
+                    _thread.start_new_thread(blink, (tdc.red,50))
+                    printto(tdc.logf,time.strftime("%c") +  " : " + tdc.errLine + ": revoked card!")
+                    cursor.execute("""INSERT INTO """+(tdc.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),'RevokedCard')""",(serial,name))
                     _thread.start_new_thread(takepict, (name,"RevokedCard"))
 ### override rfid, door opened
                 elif access == 3 and OverRide == "A":
-                    cursor.execute("""INSERT INTO """+(tdp.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),'OverRide_OPEN')""",(serial,name))
+                    cursor.execute("""INSERT INTO """+(tdc.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),'OverRide_OPEN')""",(serial,name))
                     OverRide = "B"
-                    GPIO.output(tdp.d_strike,0)
-                    printto(tdp.logf,time.strftime("%c")+" : manual override, Door is OPEN!")
+                    GPIO.output(tdc.d_strike,0)
+                    printto(tdc.logf,time.strftime("%c")+" : manual override, Door is OPEN!")
                     ledsGRY(True,True,True)
 ### cancel override and make-cards, door closed
                 elif access == 3 and OverRide == "B" or access == 3 and OverRide == "C" or access == 3 and OverRide == "D":
-                    cursor.execute("""INSERT INTO """+(tdp.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),'OverRide_Closed')""",(serial,name))
+                    cursor.execute("""INSERT INTO """+(tdc.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),(%s),'OverRide_Closed')""",(serial,name))
                     OverRide = "A"
-                    _thread.start_new_thread(blink, (tdp.red,20))
-                    _thread.start_new_thread(blink, (tdp.green,20))
-                    _thread.start_new_thread(blink, (tdp.yellow,20))
-                    GPIO.output(tdp.d_strike,1)
-                    printto(tdp.logf,time.strftime("%c") + " : override aborted, Door is CLOSED!")
-                    blink(tdp.red,35)
+                    _thread.start_new_thread(blink, (tdc.red,20))
+                    _thread.start_new_thread(blink, (tdc.green,20))
+                    _thread.start_new_thread(blink, (tdc.yellow,20))
+                    GPIO.output(tdc.d_strike,1)
+                    printto(tdc.logf,time.strftime("%c") + " : override aborted, Door is CLOSED!")
+                    blink(tdc.red,35)
 ### make house card
                 elif access == 4:
                     OverRide = "C"
-                    cursor.execute("""INSERT INTO """+(tdp.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'MkNewHouseCard','MkNewHouse')""",(serial))
+                    cursor.execute("""INSERT INTO """+(tdc.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'MkNewHouseCard','MkNewHouse')""",(serial))
                     ledsGRY(True,True,True)
-                    printto(tdp.logf,time.strftime("%c")+" : make house card, swipe new card")
+                    printto(tdc.logf,time.strftime("%c")+" : make house card, swipe new card")
 ### make guest card
                 elif access == 5:
                     OverRide = "D"
-                    cursor.execute("""INSERT INTO """+(tdp.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'MkNewGuestCard','MkNewGuest')""",(serial))
+                    cursor.execute("""INSERT INTO """+(tdc.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'MkNewGuestCard','MkNewGuest')""",(serial))
                     ledsGRY(True,True,True)
-                    printto(tdp.logf,time.strftime("%c")+" : make guest card, swipe new card")
+                    printto(tdc.logf,time.strftime("%c")+" : make guest card, swipe new card")    
 #### write new house card to Database
             elif OverRide == "C":
-                _thread.start_new_thread(blink, (tdp.yellow,30))
-                cursor.execute("""INSERT INTO """+(tdp.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'House Registerd','MkNewHouse')""",(serial))
-                cursor.execute("""INSERT INTO """+(tdp.dbKe)+""" (ID,name,counter,acc_group,access) VALUES ((%s),"<----NewHouse",'1','house','1')""", (serial))
-                printto(tdp.logf,time.strftime("%c") + " : " + tdp.errLine + ": new HOUSE card registerd " + serial)
-                OverRide = "A"
+                _thread.start_new_thread(blink, (tdc.yellow,30))
+                cursor.execute("""INSERT INTO """+(tdc.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'House Registerd','MkNewHouse')""",(serial))
+                cursor.execute("""INSERT INTO """+(tdc.dbKe)+""" (ID,name,counter,acc_group,access) VALUES ((%s),"<----NewHouse",'1','house','1')""", (serial))
+                printto(tdc.logf,time.strftime("%c") + " : " + tdc.errLine + ": new HOUSE card registerd " + serial)
+                OverRide = "A" 
 #### write new guest card to Database
             elif OverRide == "D":
-                _thread.start_new_thread(blink, (tdp.yellow,30))
-                cursor.execute("""INSERT INTO """+(tdp.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'Guest Registerd','MkNewGuest')""",(serial))
-                cursor.execute("""INSERT INTO """+(tdp.dbKe)+""" (ID,name,counter,acc_group,access,weekdays) VALUES ((%s),"<----NewGuest",'1','work','2',"'0','1','2','3','4','5','6'")""", (serial))
-                printto(tdp.logf,time.strftime("%c") + " : " + tdp.errLine + ": new GUEST card registerd " + serial)
-                OverRide = "A"
+                _thread.start_new_thread(blink, (tdc.yellow,30))
+                cursor.execute("""INSERT INTO """+(tdc.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'Guest Registerd','MkNewGuest')""",(serial))
+                cursor.execute("""INSERT INTO """+(tdc.dbKe)+""" (ID,name,counter,acc_group,access,weekdays) VALUES ((%s),"<----NewGuest",'1','work','2',"'0','1','2','3','4','5','6'")""", (serial))
+                printto(tdc.logf,time.strftime("%c") + " : " + tdc.errLine + ": new GUEST card registerd " + serial) 
+                OverRide = "A" 
 ### unknown cards
-            else:
-                printto(tdp.logf,time.strftime("%c")+ " : " + tdp.errLine + "unknown card!" + serial)
-                cursor.execute("""INSERT INTO """+(tdp.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'unknown','UnknownCard')""",(serial))
+            else: 
+                printto(tdc.logf,time.strftime("%c")+ " : " + tdc.errLine + "unknown card!" + serial)
+                #cursor.execute("""INSERT INTO """+(tdc.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'unknown','UnknownCard')""",(serial))
                 _thread.start_new_thread(takepict, ("unknown","UnknownCard"))
-                _thread.start_new_thread(blink, (tdp.yellow,50))
-                _thread.start_new_thread(blink, (tdp.red,50))
-                _thread.start_new_thread(blink, (tdp.green,50))
+                _thread.start_new_thread(blink, (tdc.yellow,50))
+                _thread.start_new_thread(blink, (tdc.red,50))
+                _thread.start_new_thread(blink, (tdc.green,50))
             cursor.close()
             connection.commit()
             connection.close ()
             name=""
 except (KeyboardInterrupt, SystemExit):
     ledsGRY(False,False,False)
-    GPIO.output(tdp.pstat, False)
+    GPIO.output(tdc.pstat, False)
     GPIO.cleanup()
     cursor.close()
     connection.commit()
     connection.close ()
-    printto(tdp.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdp.errLine + "!!! KBinterruptOrSysEx !!!")
+    printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdc.errLine + "!!! KBinterruptOrSysEx !!!")
     sys.exit(0)
 
 except BaseException as error:
-    printto(tdp.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdp.errLine + 'BaseException: {}'.format(error))
+    printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdc.errLine + 'BaseException: {}'.format(error))
 
-finally:
-    printto(tdp.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdp.errLine + "TheDoor.py restarting after finally")
-    os.system(tdp.pathtoscript + "restartdoor")
-    sys.exit(0)
+finally:    
+    printto(tdc.logpi,time.strftime("%H:%M:%S-%m-%d-%y") + " : " + tdc.errLine + "TheDoor.py restarting after finally")
+    os.system(tdc.pathtoscript + "restartdoor")
+    sys.exit(0)    
