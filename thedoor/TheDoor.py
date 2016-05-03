@@ -11,7 +11,7 @@
 ##########################################################################################
 ####  			! ! THIS PROGRAM RUNS THE READER, NOTHING TO MODIFY ! !
 ##########################################################################################
-import TheDoorConfig as tdc
+import TheDoorPrefs as tdc
 import shlex
 import subprocess
 import sys
@@ -27,7 +27,8 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(tdc.green, GPIO.OUT) 
 GPIO.setup(tdc.red, GPIO.OUT) 
-GPIO.setup(tdc.yellow, GPIO.OUT) 
+GPIO.setup(tdc.yellow, GPIO.OUT)
+GPIO.setup(tdc.white, GPIO.OUT)  
 GPIO.setup(tdc.pstat,GPIO.OUT)
 GPIO.setup(tdc.d_strike, GPIO.OUT)
 GPIO.setup(tdc.d_unused, GPIO.OUT)
@@ -291,11 +292,8 @@ try:
 ### unknown cards
             else: 
                 printto(tdc.logf,time.strftime("%c")+ " : " + tdc.errLine + "unknown card!" + serial)
-                #cursor.execute("""INSERT INTO """+(tdc.dbAc)+""" (id,acc,card,nam,err) VALUES ('0',NOW(),(%s),'unknown','UnknownCard')""",(serial))
                 _thread.start_new_thread(takepict, ("unknown","UnknownCard"))
-                _thread.start_new_thread(blink, (tdc.yellow,50))
-                _thread.start_new_thread(blink, (tdc.red,50))
-                _thread.start_new_thread(blink, (tdc.green,50))
+                _thread.start_new_thread(blink, (tdc.white,50))
             cursor.close()
             connection.commit()
             connection.close ()
