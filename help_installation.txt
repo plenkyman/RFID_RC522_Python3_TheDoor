@@ -48,16 +48,16 @@ Option: full install, all necessary software is installed:
   and wificountry.
 - reboot ! mandatory!
 - after rebooting to terminal:
-	1.	wget http://www.thedoor.thedoor.plenkyman.com/thedoor_full_install_v8.sh
-	2.	. thedoor_full_install_v8.sh		
+	1.	wget http://www.thedoor.thedoor.plenkyman.com/thedoor_full_install_v9.sh
+	2.	. thedoor_full_install_v9.sh		
 - This will take around 20 minutes, you will have to enter a root password for mysql
   and a password for the RfidDoor database.
   The Rasperry will shut down when installation is finished.
 	
 Option: partial install, on systems that have mysql, pypy, pymysql, numpy, subversion installed:
 #########################################################################################
-- in Terminal: 1.	wget http://www.thedoor.plenkyman.com/thedoor_partial_install_v8.sh
-			   2.	. thedoor_partial_install_v8.sh	
+- in Terminal: 1.	wget http://www.thedoor.plenkyman.com/thedoor_partial_install_v9.sh
+			   2.	. thedoor_partial_install_v9.sh	
 - This will take a few minutes, you will have to enter your root password for mysql
   and a new password for the RfidDoor database.
   The Rasperry will shut down when installation is finished.
