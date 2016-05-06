@@ -6,7 +6,7 @@
 	MISO- pin 21, GPIO9 ||| MOSI- pin 19, GPIO10 ||| SCK- pin 23, GPIO11
 	NSS- pin 24, GPIO7 ||| IRQ- Don’t Attach to rpi
 	--------------------------------------------------------------------------------------
-			            remixed by plenkyman	v8.April 2016
+			            remixed by plenkyman	v9 May 2016
 #######################       thedoorpy@plenkyman.com       ##################################
 
 Hardware: Raspberry Pi, Pi Camera, Edimax USB Wifi Dongle: http://amzn.com/B00UGBI91U
@@ -130,5 +130,5 @@ setdoorprefs		Set GPIO pins for LED's, strike and exitbutton and PiCam settings
 
 Uninstall, remove program:
 #################################################################################
-Terminal 1. wget http://www.thedoor.plenkyman.com/thedoor_uninstaller_v8.sh
-	 2. . thedoor_uninstaller_v8.sh
+Terminal 1. wget http://www.thedoor.plenkyman.com/thedoor_uninstaller_v9.sh
+	 2. . thedoor_uninstaller_v9.sh
