@@ -1,4 +1,10 @@
 # RFID RC522 Python3 TheDoor
+I have exchanged the Exit Button for a doorbell button.
+The electronics of the previous Exit Button have not behaved well under high temperature / humidity
+and also during lightening.
+
+a new version is coming up in a few days...
+
 Access System based on a raspberry pi, RC522 Rfid reader, python3
 
 Copyright 2014 (BSD License) Credits:  Florian Otto(Solider) and hadara
